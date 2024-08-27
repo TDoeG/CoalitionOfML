@@ -1,6 +1,7 @@
 import torch
 import torch.optim as optim
 import numpy as np
+from skimage import color
 from torch.utils.data import DataLoader, TensorDataset
 from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
