@@ -1,6 +1,7 @@
 import torch
 import torch.optim as optim
 import numpy as np
+import os
 from skimage import color
 from torch.utils.data import DataLoader, TensorDataset
 from model import ColorizationModel  # Import the model
@@ -45,6 +46,15 @@ for epoch in range(epochs):
         optimizer.step()
     if (epoch + 1) % 10 == 0:
         print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item()}')
+
+# Save the trained model
+save_folder = './trained_model/'
+if not os.path.exists(save_folder):
+    os.makedirs(save_folder)
+
+model_path = os.path.join(save_folder, 'colorization_model.pth')
+torch.save(model.state_dict(), model_path)
+print(f'Model saved at {model_path}')
 
 # Evaluate the model
 model.eval()
