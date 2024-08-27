@@ -40,9 +40,8 @@ def resize_images_in_folder(folder_path, target_size=(100, 100)):
     for root, dirs, files in os.walk(folder_path):
         for filename in files:
             # Ensure that filename is a string and ends with a valid image extension
-            if isinstance(filename, str) and filename.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif')):
+            if isinstance(filename, str) and filename.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif', '.JPG')):
                 img_path = os.path.join(root, filename)  # Construct full file path
-                
                 try:
                     # Attempt to open the image
                     img = Image.open(img_path)
@@ -53,14 +52,35 @@ def resize_images_in_folder(folder_path, target_size=(100, 100)):
                     # Save the resized image, replacing the original one
                     resized_img.save(img_path)
                     print(f"Resized and saved image: {img_path}")
+                    
+                    # Opens new image
+                    img = Image.open(img_path)
+
+                    # If new image is not size 100x100, attempt to delete
+                    if img.size[0] != 100 or img.size[1] != 100:
+                        try:
+                            os.remove(img_path)
+                            print(f"Deleted corrupted or problematic image: {img_path}")
+                        except Exception as delete_error:
+                            print(f"Failed to delete image {img_path}: {delete_error}")
                 
                 except Exception as e:
-                    # Print the error message and continue with the next file
+                    # Print the error message
                     print(f"Error processing file {img_path}: {e}")
+                    
+                    # Attempt to delete the error image
+                    try:
+                        os.remove(img_path)
+                        print(f"Deleted corrupted or problematic image: {img_path}")
+                    except Exception as delete_error:
+                        print(f"Failed to delete image {img_path}: {delete_error}")
+
+
+
                     
 source_folder = './assets/images/color/'  # Replace with the path to your source folder
 destination_folder = './assets/images/bw/'  # Replace with the path to your destination folder
 
-# convert_images_to_greyscale(source_folder, destination_folder)
+#convert_images_to_greyscale(source_folder, destination_folder)
 resize_images_in_folder(source_folder)
 resize_images_in_folder(destination_folder)
