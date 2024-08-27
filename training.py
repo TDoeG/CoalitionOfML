@@ -15,10 +15,10 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load and preprocess images
 folder_path1 = './assets/images/bw/'
 folder_path2 = './assets/images/color/'
-images1 = load_images_from_folder(folder_path1)
-images2 = load_images_from_folder(folder_path2)
+grayscale = load_images_from_folder(folder_path1)
+colorized = load_images_from_folder(folder_path2)
 
-X, Y = preprocess_images(images1)
+X, Y = preprocess_images(grayscale,colorized)
 
 # Convert to PyTorch tensors
 X = torch.tensor(X).unsqueeze(1).float().to(device)
@@ -26,7 +26,7 @@ Y = torch.tensor(Y).permute(0, 3, 1, 2).float().to(device)
 
 # Create DataLoader
 dataset = TensorDataset(X, Y)
-dataloader = DataLoader(dataset, batch_size=512, shuffle=True)
+dataloader = DataLoader(dataset, batch_size=64, shuffle=True, num_workers=8)
 
 # Initialize the model
 model = ColorizationModel().to(device)
@@ -36,7 +36,7 @@ criterion = torch.nn.MSELoss()
 optimizer = optim.RMSprop(model.parameters(), lr=0.001)
 
 # Training loop
-epochs = 400
+epochs = 100
 for epoch in range(epochs):
     for inputs, targets in dataloader:
         optimizer.zero_grad()

@@ -34,8 +34,33 @@ def convert_images_to_greyscale(source_folder, destination_folder):
                 except OSError as e:
                     # Print the error and skip the image
                     print(f"Error processing {img_path}: {e}")
+
+def resize_images_in_folder(folder_path, target_size=(100, 100)):
+    # Loop through all the directories and files in the folder
+    for root, dirs, files in os.walk(folder_path):
+        for filename in files:
+            # Ensure that filename is a string and ends with a valid image extension
+            if isinstance(filename, str) and filename.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif')):
+                img_path = os.path.join(root, filename)  # Construct full file path
+                
+                try:
+                    # Attempt to open the image
+                    img = Image.open(img_path)
+                    
+                    # Resize the image to the target size
+                    resized_img = img.resize(target_size)
+                    
+                    # Save the resized image, replacing the original one
+                    resized_img.save(img_path)
+                    print(f"Resized and saved image: {img_path}")
+                
+                except Exception as e:
+                    # Print the error message and continue with the next file
+                    print(f"Error processing file {img_path}: {e}")
                     
 source_folder = './assets/images/color/'  # Replace with the path to your source folder
 destination_folder = './assets/images/bw/'  # Replace with the path to your destination folder
 
-convert_images_to_greyscale(source_folder, destination_folder)
+# convert_images_to_greyscale(source_folder, destination_folder)
+resize_images_in_folder(source_folder)
+resize_images_in_folder(destination_folder)

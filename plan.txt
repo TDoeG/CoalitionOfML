@@ -1,0 +1,1 @@
+- Make data processing into the preprocessing file so that it wont use all my memory

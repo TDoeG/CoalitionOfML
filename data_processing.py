@@ -4,29 +4,44 @@ from PIL import Image
 from skimage.color import rgb2lab, rgb2gray
 from skimage import color
 
-# Function to load and preprocess images from a specified folder
 def load_images_from_folder(folder_path):
-    images = []  # Initialize a list to store images
-    for root, dirs, files in os.walk(folder_path):  # Traverse through the folder
-        for file in files:  # Loop through each file in the folder
-            img_path = os.path.join(root, file)  # Get the full path of the image file
-            img = Image.open(img_path).resize((100, 100))  # Open and resize the image to 100x100 pixels
-            img = np.array(img) / 255.0  # Convert the image to a numpy array and normalize pixel values to [0, 1]
-            images.append(img)  # Append the processed image to the list
-    return images  # Return the list of images
+    images = []
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            # Construct the full path to the image
+            img_path = os.path.join(root, file)
+            try:
+                # Attempt to open the image
+                img = Image.open(img_path).resize((100, 100))
+                img = np.array(img) / 255.0
+                images.append(img)
+            except (OSError, ValueError) as e:
+                # Handle exceptions for image loading or processing
+                print(f"Error loading image {img_path}: {e}")
+                continue
+    return images
 
-# Function to preprocess images for model training
-def preprocess_images(images):
-    # Convert images to grayscale
-    gray_images = [rgb2gray(img) for img in images]  # Convert each image to grayscale using rgb2gray
+# Function to preprocess grayscale and color images for model training with error handling
+def preprocess_images(grayscale_images, color_images):
+    gray_images = []
+    processed_color_images = []
     
-    color_images = []  # Initialize a list to store the LAB color components
-    for img in images:  # Loop through each image
-        lab_image = rgb2lab(img)  # Convert the RGB image to LAB color space
-        # Normalize the LAB image by shifting and scaling the L, A, and B channels
-        lab_image_norm = (lab_image + [0, 128, 128]) / [100, 255, 255]
-        # Extract only the A and B channels (discard the L channel) and add to the color_images list
-        color_images.append(lab_image_norm[:, :, 1:])
+    for gray_img, color_img in zip(grayscale_images, color_images):
+        try:
+            # Ensure the grayscale image is already in the correct format
+            gray_images.append(gray_img)
+            
+            # Convert color image to LAB color space and normalize
+            if color_img.shape[-1] == 3:  # Ensure it's an RGB image
+                lab_image = rgb2lab(color_img)
+                lab_image_norm = (lab_image + [0, 128, 128]) / [100, 255, 255]
+                processed_color_images.append(lab_image_norm[:, :, 1:])
+            else:
+                print(f"Skipping non-RGB color image with shape: {color_img.shape}")
+        
+        except Exception as e:
+            # Print error message and continue with the next image
+            print(f"Error processing image: {e}")
+            continue
     
-    # Return the grayscale images and the normalized color images (A and B channels)
-    return np.array(gray_images), np.array(color_images)
+    return np.array(gray_images), np.array(processed_color_images)
