@@ -1,50 +1,34 @@
-import keras
-from keras.optimizers import Adam
-from keras import backend as K
-from keras.layers import Conv2D,MaxPooling2D,UpSampling2D,Input,BatchNormalization,LeakyReLU,concatenate
-from keras.models import Model
+import torch
+import torch.nn as nn
 
-K.clear_session()
-
-def InstantiateModel(in_):
-    model_ = Conv2D(16,(3,3),padding='same',strides=1)(in_)
-    model_ = LeakyReLU()(model_)
-    model_ = Conv2D(32,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    model_ = MaxPooling2D(pool_size=(2,2),padding='same')(model_)
+class ColorizationModel(nn.Module):
+    def __init__(self):
+        super(ColorizationModel, self).__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 8, kernel_size=3, stride=2, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(8, 16, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(16, 16, kernel_size=3, stride=2, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(32, 32, kernel_size=3, stride=2, padding=1),
+            nn.ReLU()
+        )
+        self.decoder = nn.Sequential(
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(32, 16, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(16, 2, kernel_size=3, stride=1, padding=1),
+            nn.Sigmoid()
+        )
     
-    model_ = Conv2D(64,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    model_ = MaxPooling2D(pool_size=(2,2),padding='same')(model_)
-    
-    model_ = Conv2D(128,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    
-    model_ = Conv2D(256,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    
-    model_ = UpSampling2D((2, 2))(model_)
-    model_ = Conv2D(128,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    
-    model_ = UpSampling2D((2, 2))(model_)
-    model_ = Conv2D(64,(3,3), padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    
-    concat_ = concatenate([model_, in_]) 
-    
-    model_ = Conv2D(64,(3,3), padding='same',strides=1)(concat_)
-    model_ = LeakyReLU()(model_)
-    model_ = BatchNormalization()(model_)
-    
-    model_ = Conv2D(32,(3,3),padding='same',strides=1)(model_)
-    model_ = LeakyReLU()(model_)
-    
-    model_ = Conv2D(2,(3,3), activation='tanh',padding='same',strides=1)(model_)
-
-    return model_
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
