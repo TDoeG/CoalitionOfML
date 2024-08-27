@@ -16,8 +16,8 @@ GrayScaleToColorizedML/
 ├── visualization.py    # Contains functions for visualizing the predictions
 └── assets/
     ├── images/
-    │   ├── results/    # Contains the training images (grayscale)
-    │   └── images/     # Contains the images for colorization (color)
+    │   ├── bw/    # Contains the training images (grayscale)
+    │   └── color/     # Contains the images for colorization (color)
     └── path_to_image   # Example image for testing
 ```
 

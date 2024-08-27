@@ -13,8 +13,8 @@ from PIL import Image
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load and preprocess images
-folder_path1 = './assets/images/results/'
-folder_path2 = './assets/images/'
+folder_path1 = './assets/images/bw/'
+folder_path2 = './assets/images/color/'
 images1 = load_images_from_folder(folder_path1)
 images2 = load_images_from_folder(folder_path2)
 
