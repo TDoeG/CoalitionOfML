@@ -30,7 +30,6 @@ def convert_images_to_greyscale(source_folder, destination_folder):
                     # Save the grayscale image to the destination folder
                     grayscale_img.save(save_path)
                     print(f"Saved grayscale image: {save_path}")
-                
                 except OSError as e:
                     # Print the error and skip the image
                     print(f"Error processing {img_path}: {e}")
@@ -63,7 +62,6 @@ def resize_images_in_folder(folder_path, target_size=(100, 100)):
                             print(f"Deleted corrupted or problematic image: {img_path}")
                         except Exception as delete_error:
                             print(f"Failed to delete image {img_path}: {delete_error}")
-                
                 except Exception as e:
                     # Print the error message
                     print(f"Error processing file {img_path}: {e}")
