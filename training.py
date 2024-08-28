@@ -6,6 +6,7 @@ import os
 import time
 from tqdm import tqdm  # For progress bar
 from torch.utils.data import DataLoader, TensorDataset, random_split
+from skimage import color
 from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
 from visualization import visualize_prediction  # Import visualization function
@@ -50,8 +51,8 @@ def prepare_data_loaders(X, Y, batch_size=16):
         # Create DataLoader
         train_dataset = TensorDataset(train_X, train_Y)
         test_dataset = TensorDataset(test_X, test_Y)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=5)
         
         return train_loader, test_loader
     
@@ -138,18 +139,44 @@ def save_model(model, save_folder='./trained_model/'):
     except Exception as e:
         print(f"Error saving the model: {e}")
 
-def evaluate_model(model, test_loader):
-    """Evaluate the model."""
+def evaluate_model(model, test_loader, threshold=0.1):
+    """Evaluate the model, print accuracy, and update progress bar."""
     try:
         model.eval()
-        loss = 0.0
+        total_loss = 0.0
+        total_accuracy = 0.0
+        total_samples = 0
         criterion = torch.nn.MSELoss()
+
+        # Initialize tqdm progress bar
+        progress_bar = tqdm(test_loader, desc="Evaluating", unit="batch")
+
         with torch.no_grad():
-            for inputs, targets in test_loader:
+            for inputs, targets in progress_bar:
                 outputs = model(inputs)
-                loss += criterion(outputs, targets).item()
-        print(f'Evaluation Loss: {loss / len(test_loader)}')
-    # Error handling
+                
+                # Resize outputs and targets to match dimensions
+                outputs_resized = F.interpolate(outputs, size=(100, 100), mode='bilinear', align_corners=False)
+                targets_resized = F.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
+                
+                # Calculate loss
+                loss = criterion(outputs_resized, targets_resized).item()
+                total_loss += loss
+
+                # Calculate accuracy using the calculate_accuracy function
+                accuracy = calculate_accuracy(outputs_resized, targets_resized, threshold)
+                total_accuracy += accuracy
+                total_samples += 1
+
+                # Update progress bar
+                progress_bar.set_postfix(loss=loss, accuracy=accuracy)
+
+        # Final loss and accuracy
+        average_loss = total_loss / len(test_loader)
+        average_accuracy = total_accuracy / total_samples
+        print(f'Evaluation Loss: {average_loss:.4f}, Average Accuracy: {average_accuracy:.2f}%')
+    
+    # Error Handling
     except Exception as e:
         print(f"Error during evaluation: {e}")
 
@@ -172,7 +199,7 @@ def main():
     model = ColorizationModel().to(device)
 
     # Train the model
-    model = train_model(model, train_loader, epochs=50, lr=0.001)
+    model = train_model(model, train_loader, epochs=10, lr=0.001)
     if model is None:
         return
 
@@ -182,15 +209,23 @@ def main():
     # Evaluate the model
     evaluate_model(model, test_loader)
 
-    # Prediction and visualization example
-    # img = Image.open('path_to_image').resize((100, 100))
-    # img = np.array(img) / 255.0
-    # X = torch.tensor(color.rgb2gray(img)).unsqueeze(0).unsqueeze(0).float().to(device)
-    #
-    # with torch.no_grad():
-    #     output = model(X)
-    #
-    # visualize_prediction(img, output)
+    img = Image.open('./assets/images/color/DSCN9811.JPG').resize((100, 100))
+    img = np.array(img)
+
+    # Debugging: Print the shape and number of dimensions of the image
+    print(f"Image shape: {img.shape}, Image ndim: {img.ndim}")
+
+    # Check if the image has 3 channels (RGB)
+    if img.ndim == 3 and img.shape[2] == 3:
+        img_gray = color.rgb2gray(img)
+        print("Converted RGB to grayscale.")
+    else:
+        img_gray = img  # The image is already grayscale
+        print("Image is already grayscale.")
+
+    # Convert to tensor
+    X = torch.tensor(img_gray).unsqueeze(0).unsqueeze(0).float().to(device)
+
 
 if __name__ == "__main__":
     main()
