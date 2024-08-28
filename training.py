@@ -182,8 +182,7 @@ def main():
     # Evaluate the model
     evaluate_model(model, test_loader)
 
-    # (Optional) Prediction and visualization example
-    # Uncomment the lines below to visualize predictions
+    # Prediction and visualization example
     # img = Image.open('path_to_image').resize((100, 100))
     # img = np.array(img) / 255.0
     # X = torch.tensor(color.rgb2gray(img)).unsqueeze(0).unsqueeze(0).float().to(device)
