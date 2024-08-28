@@ -28,7 +28,7 @@ def load_and_preprocess_images(grayscale_path, colorized_path):
         print(f"Error loading or preprocessing images: {e}")
         return None, None
 
-def prepare_data_loaders(X, Y, batch_size=256):
+def prepare_data_loaders(X, Y, batch_size=16):
     """Convert data to tensors, split into train/test sets, and create data loaders."""
     try:
         X_tensor = torch.tensor(X).unsqueeze(1).float().to(device)
@@ -130,7 +130,7 @@ def save_model(model, save_folder='./trained_model/'):
             os.makedirs(save_folder)
         
         # Adds model to the model path
-        model_path = os.path.join(save_folder, 'colorization_model.pth')
+        model_path = os.path.join(save_folder, 'colorization_model1.pth')
         torch.save(model.state_dict(), model_path)
         print(f'Model saved at {model_path}')
 
@@ -172,7 +172,7 @@ def main():
     model = ColorizationModel().to(device)
 
     # Train the model
-    model = train_model(model, train_loader, epochs=10, lr=0.001)
+    model = train_model(model, train_loader, epochs=50, lr=0.001)
     if model is None:
         return
 
