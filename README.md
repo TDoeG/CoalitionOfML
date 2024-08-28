@@ -37,6 +37,9 @@ pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib
 - Matplotlib: For visualizing the results.
 - TQDM: For progress visualization.
 
+```
+Python Version: 3.10
+```
 ## Data Structure
 1. **Training Images**: Place grayscale images in the assets/images/results/ directory. These images are used for training.
 
