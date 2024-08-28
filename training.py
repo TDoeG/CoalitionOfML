@@ -199,7 +199,7 @@ def main():
     model = ColorizationModel().to(device)
 
     # Train the model
-    model = train_model(model, train_loader, epochs=10, lr=0.001)
+    model = train_model(model, train_loader, epochs=25, lr=0.0001)
     if model is None:
         return
 
