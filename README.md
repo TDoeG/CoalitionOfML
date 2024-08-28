@@ -10,16 +10,18 @@ This project uses a deep learning model to colorize grayscale images. The model 
 ```
 GrayScaleToColorizedML/
 │
-├── model.py            # Contains the ColorizationModel class
-├── training.py         # Contains the training, evaluation, and prediction code
-├── data_processing.py  # Contains image loading and preprocessing functions
-├── visualization.py    # Contains functions for visualizing the predictions
+├── model.py                # Contains the ColorizationModel class
+├── training.py             # Contains the training, evaluation, and prediction code
+├── data_preprocessing.py   # Runs data preprocessing (Make grayscale & resize)
+├── data_processing.py      # Contains image loading and preprocessing functions
+├── testing.py              # Testing script for the saved model (Run AFTER training)
+├── visualization.py        # Contains functions for visualizing the predictions
 ├── assets/
 │   ├── images/
-│   │   ├── bw/         # Contains the training images (grayscale)
-│   │   └── color/      # Contains the images for colorization (color)
-│   └── path_to_image   # Example image for testing
-└── trained_model/      # Contains trained model as a .pth
+│   │   ├── bw/             # Contains the training images (grayscale)
+│   │   └── color/          # Contains the images for colorization (color)
+│   └── path_to_image       # Example image for testing
+└── trained_model/          # Contains trained model as a .pth
 ```
 
 ## Installation
