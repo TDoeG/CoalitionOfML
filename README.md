@@ -41,14 +41,22 @@ pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib
 2. **Color Images**: Place the corresponding color images in the assets/images/ directory. These images provide the color information for the training.
 
 ## How to Run the Model
-1. **Prepare Data**: Ensure that your grayscale and color images are placed in the correct directories as outlined in the Data Structure section.
+1. **Prepare Data**: Ensure that your color images are placed in the correct directories as outlined in the Data Structure section.
 
-2. **Train the Model**: Run the training script to train the model on your dataset.
+2. **Preprocessing Data**: Run `data_preprocessing.py` script to preprocess your images into cleaner, much more ingestible data.
+
+```
+python data_preprocessing.py
+```
+
+
+3. **Train the Model**: Run `training.py` script to train the model on your dataset.
 
 ```
 python training.py
 ```
-3. **Predict and Visualize**: The script will also handle predicting the colors for a sample image and visualize the results.
+
+4. **Predict and Visualize**: The script will also handle predicting the colors for a sample image and visualize the results.
 Make sure to update the path_to_image in training.py to the path of an image you want to test the model on.
 
 ## Usage
