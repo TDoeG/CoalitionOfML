@@ -38,7 +38,7 @@ def preprocess_images(grayscale_images, color_images):
                 processed_color_images.append(lab_image_norm[:, :, 1:])
             else:
                 print(f"Skipping non-RGB color image with shape: {color_img.shape}")
-        
+        # Error Handler
         except Exception as e:
             # Print error message and continue with the next image
             print(f"Error processing image: {e}")

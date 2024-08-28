@@ -28,7 +28,7 @@ def load_and_preprocess_images(grayscale_path, colorized_path):
         print(f"Error loading or preprocessing images: {e}")
         return None, None
 
-def prepare_data_loaders(X, Y, batch_size=32):
+def prepare_data_loaders(X, Y, batch_size=256):
     """Convert data to tensors, split into train/test sets, and create data loaders."""
     try:
         X_tensor = torch.tensor(X).unsqueeze(1).float().to(device)
