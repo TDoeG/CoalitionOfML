@@ -81,6 +81,6 @@ def resize_images_in_folder(folder_path, target_size=(100, 100)):
 source_folder = './assets/images/color/'  # Replace with the path to your source folder
 destination_folder = './assets/images/bw/'  # Replace with the path to your destination folder
 
-#convert_images_to_greyscale(source_folder, destination_folder)
+convert_images_to_greyscale(source_folder, destination_folder)
 resize_images_in_folder(source_folder)
 resize_images_in_folder(destination_folder)
