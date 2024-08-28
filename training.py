@@ -1,26 +1,29 @@
 import torch
 import torch.optim as optim
+import torch.nn.functional as F
 import numpy as np
 import os
+import time
+from tqdm import tqdm  # For progress bar
 from torch.utils.data import DataLoader, TensorDataset, random_split
 from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
 from visualization import visualize_prediction  # Import visualization function
 from PIL import Image
-import torch.nn.functional as F
-import time
-from tqdm import tqdm  # For progress bar
 
-# Set device
+# Sets device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def load_and_preprocess_images(grayscale_path, colorized_path):
     """Load and preprocess images."""
     try:
+        # Loads grayscale and colorized into arrays
         grayscale = load_images_from_folder(grayscale_path)
         colorized = load_images_from_folder(colorized_path)
         X, Y = preprocess_images(grayscale, colorized)
         return X, Y
+    
+    # Error handling
     except Exception as e:
         print(f"Error loading or preprocessing images: {e}")
         return None, None
@@ -51,6 +54,8 @@ def prepare_data_loaders(X, Y, batch_size=32):
         test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
         
         return train_loader, test_loader
+    
+    # Error handling
     except Exception as e:
         print(f"Error preparing data loaders: {e}")
         return None, None
@@ -69,18 +74,20 @@ def train_model(model, train_loader, epochs=10, lr=0.001):
         criterion = torch.nn.MSELoss()
         optimizer = torch.optim.RMSprop(model.parameters(), lr=lr)
         
+        # Loop for training epochs
         for epoch in range(epochs):
             start_time = time.time()
             epoch_loss = 0.0
             epoch_accuracy = 0.0
             total_batches = len(train_loader)
-            
+
+            # For accurate tracking of progress, eta, loss, accuracy, etc.
             with tqdm(total=total_batches, desc=f"Epoch {epoch+1}/{epochs}") as pbar:
                 for batch_idx, (inputs, targets) in enumerate(train_loader):
                     optimizer.zero_grad()
                     outputs = model(inputs)
-                    
-                    # Resize outputs and targets to match dimensions (100x100)
+
+                    # I just needed to transform the data to 100x100 because for some reason it was 104x104 going into a 100x100
                     outputs_resized = F.interpolate(outputs, size=(100, 100), mode='bilinear', align_corners=False)
                     targets_resized = F.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
                     
@@ -99,17 +106,18 @@ def train_model(model, train_loader, epochs=10, lr=0.001):
                     # Update progress bar
                     pbar.set_postfix({'Loss': loss.item(), 'Accuracy': accuracy})
                     pbar.update(1)
-            
+
             # Average loss and accuracy for the epoch
             avg_loss = epoch_loss / total_batches
             avg_accuracy = epoch_accuracy / total_batches
-            
             end_time = time.time()
             epoch_duration = end_time - start_time
-            
             print(f'Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}, Accuracy: {avg_accuracy:.2f}%, Time: {epoch_duration:.2f}s')
         
+        # Returns model after epoch loop    
         return model
+    
+    # Error handling
     except Exception as e:
         print(f"Error during training: {e}")
         return None
@@ -117,11 +125,16 @@ def train_model(model, train_loader, epochs=10, lr=0.001):
 def save_model(model, save_folder='./trained_model/'):
     """Save the trained model."""
     try:
+        # Makes the folder if it doesn't exist
         if not os.path.exists(save_folder):
             os.makedirs(save_folder)
+        
+        # Adds model to the model path
         model_path = os.path.join(save_folder, 'colorization_model.pth')
         torch.save(model.state_dict(), model_path)
         print(f'Model saved at {model_path}')
+
+    # Error handling
     except Exception as e:
         print(f"Error saving the model: {e}")
 
@@ -136,6 +149,7 @@ def evaluate_model(model, test_loader):
                 outputs = model(inputs)
                 loss += criterion(outputs, targets).item()
         print(f'Evaluation Loss: {loss / len(test_loader)}')
+    # Error handling
     except Exception as e:
         print(f"Error during evaluation: {e}")
 
@@ -147,12 +161,12 @@ def main():
     # Load and preprocess images
     X, Y = load_and_preprocess_images(folder_path1, folder_path2)
     if X is None or Y is None:
-        return  # Exit if data loading or preprocessing fails
+        return
 
     # Prepare data loaders
     train_loader, test_loader = prepare_data_loaders(X, Y, batch_size=32)
     if train_loader is None or test_loader is None:
-        return  # Exit if data loader preparation fails
+        return
 
     # Initialize the model
     model = ColorizationModel().to(device)
@@ -160,7 +174,7 @@ def main():
     # Train the model
     model = train_model(model, train_loader, epochs=100, lr=0.001)
     if model is None:
-        return  # Exit if training fails
+        return
 
     # Save the trained model
     save_model(model)
