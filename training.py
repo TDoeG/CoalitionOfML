@@ -68,7 +68,7 @@ def calculate_accuracy(outputs, targets, threshold=0.1):
     accuracy = (correct_predictions.float() / total_predictions) * 100.0
     return accuracy.item()
 
-def train_model(model, train_loader, epochs=10, lr=0.001):
+def train_model(model, train_loader, epochs, lr):
     """Train the model with accuracy and progress tracking."""
     try:
         criterion = torch.nn.MSELoss()
@@ -172,7 +172,7 @@ def main():
     model = ColorizationModel().to(device)
 
     # Train the model
-    model = train_model(model, train_loader, epochs=100, lr=0.001)
+    model = train_model(model, train_loader, epochs=10, lr=0.001)
     if model is None:
         return
 
