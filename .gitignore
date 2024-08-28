@@ -5,6 +5,7 @@ __pycache__/
 
 assets/*
 somethingml/*
+trained_model/*
 
 # C extensions
 *.so
