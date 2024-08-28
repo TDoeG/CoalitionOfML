@@ -14,18 +14,19 @@ GrayScaleToColorizedML/
 ├── training.py         # Contains the training, evaluation, and prediction code
 ├── data_processing.py  # Contains image loading and preprocessing functions
 ├── visualization.py    # Contains functions for visualizing the predictions
-└── assets/
-    ├── images/
-    │   ├── bw/    # Contains the training images (grayscale)
-    │   └── color/     # Contains the images for colorization (color)
-    └── path_to_image   # Example image for testing
+├── assets/
+│   ├── images/
+│   │   ├── bw/         # Contains the training images (grayscale)
+│   │   └── color/      # Contains the images for colorization (color)
+│   └── path_to_image   # Example image for testing
+└── trained_model/      # Contains trained model as a .pth
 ```
 
 ## Installation
 Use the following command to install the dependecies:
 
 ```
-pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib
+pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib tqdm
 ```
 - NumPy: For numerical operations and array manipulation.
 - PyTorch: The core deep learning library for building and training the model.
@@ -34,6 +35,7 @@ pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib
 - OpenCV: For image manipulation tasks such as resizing.
 - Pillow: For opening and processing images.
 - Matplotlib: For visualizing the results.
+- TQDM: For progress visualization.
 
 ## Data Structure
 1. **Training Images**: Place grayscale images in the assets/images/results/ directory. These images are used for training.
