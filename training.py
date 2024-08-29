@@ -77,6 +77,7 @@ def calculate_accuracy(outputs, targets, threshold=0.1):
     accuracy = (correct_predictions.float() / total_predictions) * 100.0
     return accuracy.item()
 
+# SOMETHING MIGHT BE WRONG WITH THIS FUNCTION OR SOMEWHERE IN THIS
 def train_model(model, train_loader, epochs, lr):
     """Train the model with accuracy and progress tracking."""
     try:

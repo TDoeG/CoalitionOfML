@@ -88,6 +88,7 @@ def main():
 
     # Convert to RGB and display
     output_rgb = postprocess_output(output_array, input_tensor)
+    cv2.namedWindow("Output", cv2.WINDOW_NORMAL) # Makes the window scalable by nature
     cv2.imshow("Output",output_rgb)
     cv2.waitKey(0)
     cv2.destroyWindow("Output")
