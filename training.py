@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset, random_split
 from skimage import color
 from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
-from visualization import visualize_prediction  # Import visualization function
+from visualization import visualize_prediction # Imports visualization (idk if I even need this function, leave it here ig)
 from PIL import Image
 
 # Sets device
