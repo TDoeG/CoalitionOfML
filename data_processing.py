@@ -5,13 +5,13 @@ from skimage.color import rgb2lab, rgb2gray
 from skimage import color
 from tqdm import tqdm
 
-def load_images_from_folder(folder_path):
+def load_images_from_folder(folder_path, name):
     images = []
     # Count the number of files in the folder for tqdm progress bar
     total_files = sum(len(files) for _, _, files in os.walk(folder_path))
     
     # Initialize tqdm progress bar
-    progress_bar = tqdm(total=total_files, desc="Loading Images", unit="image")
+    progress_bar = tqdm(total=total_files, desc=f"Loading {name} Images", unit="image")
     for root, dirs, files in os.walk(folder_path):
         for file in files:
             # Construct the full path to the image
