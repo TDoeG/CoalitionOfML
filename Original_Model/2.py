@@ -2,7 +2,7 @@ import cv2
 import torch
 import numpy as np
 from skimage import color
-from model import ColorizationModel  # Import your model
+from Original_Model.model import ColorizationModel  # Import your model
 from PIL import Image
 
 # Function to load the model

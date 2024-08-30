@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 assets/*
-somethingml/*
-trained_model/*
+Original_Model/trained_model/*
+New_Model/saved_model/*
 
 # C extensions
 *.so

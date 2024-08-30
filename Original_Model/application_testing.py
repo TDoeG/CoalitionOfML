@@ -5,7 +5,7 @@ import numpy as np
 import torch.nn.functional as F
 from PIL import Image
 from skimage import color
-from model import ColorizationModel  # Import the model
+from Original_Model.model import ColorizationModel  # Import the model
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -46,7 +46,7 @@ def cam_maybe():
             return rgb_image
         
 def preprocess_input_image(image_path):
-    img = Image.open(image_path)
+    img = Image.open(image_path).convert('L')
     img = img.resize((100, 100))
     img = np.array(img) / 255.0
     img_tensor = torch.tensor(img).unsqueeze(0).unsqueeze(0).float().to(device)
@@ -76,7 +76,7 @@ def main():
 
     # Load the trained model
     model = ColorizationModel().to(device)
-    model.load_state_dict(torch.load('./trained_model/colorization_model2.pth',weights_only=True))
+    model.load_state_dict(torch.load('./trained_model/colorization_model3.pth',weights_only=True))
     model.eval()
 
     # Preprocess the input image
