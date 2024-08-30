@@ -1,13 +1,10 @@
-import cv2 as cv2
 import os
 import torch
-import torch.nn as nn
-import torch.optim as optim
+import cv2 as cv2
 import numpy as np
 import torch.nn.functional as F
 from PIL import Image
 from skimage import color
-from torch.utils.data import DataLoader
 from model import ColorizationModel  # Import the model
 
 # Set device

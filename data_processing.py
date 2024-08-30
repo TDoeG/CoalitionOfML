@@ -42,7 +42,7 @@ def preprocess_images(grayscale_images, color_images):
     for gray_img, color_img in zip(grayscale_images, color_images):
         try:
             # Ensure the grayscale image is already in the correct format
-            gray_images.append(preprocess_grayscale_image(gray_img))
+            gray_images.append(gray_img)
             
             # Convert color image to LAB color space and normalize
             if color_img.shape[-1] == 3:  # Ensure it's an RGB image
@@ -62,16 +62,3 @@ def preprocess_images(grayscale_images, color_images):
     # Close the progress bar after processing
     progress_bar.close()
     return np.array(gray_images), np.array(processed_color_images)
-
-def preprocess_grayscale_image(img):
-    # Convert to NumPy array
-    grayscale_array = np.array(img)
-    
-    # Normalize to [0, 1]
-    grayscale_array = grayscale_array.astype(np.float32) / 255.0
-    
-    # Add batch and channel dimensions
-    grayscale_array = np.expand_dims(grayscale_array, axis=0)  # Batch dimension
-    grayscale_array = np.expand_dims(grayscale_array, axis=0)  # Channel dimension
-    
-    return grayscale_array
