@@ -2,6 +2,7 @@
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
+import torchvision.models as models
 import numpy as np
 import os
 import time
@@ -12,6 +13,7 @@ from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
 from visualization import visualize_prediction # Imports visualization (idk if I even need this function, leave it here ig)
 from PIL import Image
+from losses import PerceptualLoss, CombinedLoss
 
 # Sets device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -33,16 +35,18 @@ def load_and_preprocess_images(grayscale_path, colorized_path):
 def prepare_data_loaders(X, Y, batch_size):
     """Convert data to tensors, split into train/test sets, and create data loaders."""
     try:
+        # X tensor: adds one dimension
+        # Y tensor: batch size, channels, height, width
         X_tensor = torch.tensor(X).unsqueeze(1).float().to(device)
         Y_tensor = torch.tensor(Y).permute(0, 3, 1, 2).float().to(device)
         
         # Split the dataset
         dataset_size = len(X_tensor)
-        train_size = int(0.7 * dataset_size)
-        validation_size = int(0.1 * dataset_size)
-        test_size = dataset_size - train_size - validation_size
+        train_size = int(0.7 * dataset_size) # Splits 70%
+        validation_size = int(0.1 * dataset_size) # Splits 10%
+        test_size = dataset_size - train_size - validation_size # Rest of 20% goes to test
 
-        # Split the dataset
+        # Splits the dataset into x and y of train, validation, and test
         train_X, val_X, test_X = random_split(X_tensor, [train_size, validation_size, test_size])
         train_Y, val_Y, test_Y = random_split(Y_tensor, [train_size, validation_size, test_size])
         
@@ -54,10 +58,12 @@ def prepare_data_loaders(X, Y, batch_size):
         val_X = torch.stack([val_X[i]] for i in range(len(val_X)))
         val_Y = torch.stack([val_Y[i] for i in range(len(val_Y))])
        
-        # Create DataLoader
+        # Creates the dataset
         train_dataset = TensorDataset(train_X, train_Y)
         test_dataset = TensorDataset(test_X, test_Y)
         validation_dataset = TensorDataset(val_X, val_Y)
+
+        # Uses dataset for dataloader
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
         test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
         validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
@@ -71,9 +77,19 @@ def prepare_data_loaders(X, Y, batch_size):
 
 def calculate_accuracy(outputs, targets, threshold=0.1):
     """Calculate accuracy by checking if output pixels are within a certain threshold of target pixels."""
+    # Clamp output values to [0,1]
+    outputs = outputs.clamp(0, 1)
+
+    # Calculate the difference between the predicted and target RGB values
     diff = torch.abs(outputs - targets)
+
+    # Check if the differences are within the threshold
     correct_predictions = torch.sum(diff < threshold)
+
+    # Calculate the total number of pixels
     total_predictions = torch.numel(diff)
+
+    # Calculate accuracy as the percentage of correct predictions
     accuracy = (correct_predictions.float() / total_predictions) * 100.0
     return accuracy.item()
 
@@ -81,7 +97,9 @@ def calculate_accuracy(outputs, targets, threshold=0.1):
 def train_model(model, train_loader, epochs, lr):
     """Train the model with accuracy and progress tracking."""
     try:
-        criterion = torch.nn.MSELoss()
+        combined_loss = initialize_combined_loss(device)
+        combined_loss.to(device)
+        # criterion = torch.nn.MSELoss()
         optimizer = torch.optim.RMSprop(model.parameters(), lr=lr)
         
         # Loop for training epochs
@@ -102,7 +120,7 @@ def train_model(model, train_loader, epochs, lr):
                     targets_resized = F.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
                     
                     # Calculate loss
-                    loss = criterion(outputs_resized, targets_resized)
+                    loss = combined_loss(outputs_resized, targets_resized)
                     epoch_loss += loss.item()
                     
                     # Calculate accuracy
@@ -131,6 +149,22 @@ def train_model(model, train_loader, epochs, lr):
     except Exception as e:
         print(f"Error during training: {e}")
         return None
+    
+def initialize_combined_loss(device):
+    # Load the pre-trained VGG16 model
+    vgg16 = models.vgg16(pretrained=True).features
+    for param in vgg16.parameters():
+        param.requires_grad = False  # Freeze the VGG16 weights
+
+    # Move the model to the same device as the training
+    vgg16 = vgg16.to(device)
+
+    # Create perceptual loss and combined loss instances
+    perceptual_loss = PerceptualLoss(vgg16)
+    pixel_loss = torch.nn.MSELoss()
+    combined_loss = CombinedLoss(perceptual_loss, pixel_loss)
+
+    return combined_loss
     
 def save_model(model, save_folder='./trained_model/'):
     """Save the trained model."""
