@@ -76,7 +76,7 @@ def main():
 
     # Load the trained model
     model = ColorizationModel().to(device)
-    model.load_state_dict(torch.load('./trained_model/colorization_model1.pth',weights_only=True))
+    model.load_state_dict(torch.load('./trained_model/colorization_model2.pth',weights_only=True))
     model.eval()
 
     # Preprocess the input image
