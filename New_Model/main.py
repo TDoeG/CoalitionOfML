@@ -4,7 +4,7 @@ from data_processing import load_cifar10_dataset, create_batches, split_data, no
 from training import train_model, plot_losses
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
-root_dir = 'C:/Users/tyler/OneDrive/Documents/Github/GrayscaleToColorizedML/assets/NEW_IMAGES/cifar-10-python'
+root_dir = './assets/NEW_IMAGES/cifar-10-python'
 batch_size = 100
 learning_rate = 0.0001
 epochs = 100
