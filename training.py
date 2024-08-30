@@ -256,7 +256,7 @@ def main():
     model = ColorizationModel().to(device)
 
     # Train the model
-    model = train_model(model, train_loader, epochs=1, lr=0.001)
+    model = train_model(model, train_loader, epochs=10, lr=0.001)
     if model is None:
         return
 
@@ -269,6 +269,8 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Debugging 1: Epoch 1/1, Loss: 0.0041, Accuracy: 88.88%, Time: 1943.60s
+# Debugging 1: 
+#   1 epoch, 32 batch size, lr = 0.001, optimizer: adamW
+#   Epoch 1/1, Loss: 0.0041, Accuracy: 88.88%, Time: 1943.60s
 #   Validation Loss: 0.0042, Validation Accuracy: 88.80%
 #   Evaluation Loss: 0.0041, Average Accuracy: 88.91%
