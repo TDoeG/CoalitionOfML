@@ -13,7 +13,6 @@ from model import ColorizationModel  # Import the model
 from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
 from visualization import visualize_prediction # Imports visualization (idk if I even need this function, leave it here ig)
 from PIL import Image
-from losses import PerceptualLoss, CombinedLoss
 
 # Sets device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -50,13 +49,13 @@ def prepare_data_loaders(X, Y, batch_size):
         train_X, val_X, test_X = random_split(X_tensor, [train_size, validation_size, test_size])
         train_Y, val_Y, test_Y = random_split(Y_tensor, [train_size, validation_size, test_size])
         
-        # Stack tensors
-        train_X = torch.stack([train_X[i] for i in range(len(train_X))])
-        train_Y = torch.stack([train_Y[i] for i in range(len(train_Y))])
-        test_X = torch.stack([test_X[i] for i in range(len(test_X))])
-        test_Y = torch.stack([test_Y[i] for i in range(len(test_Y))])
-        val_X = torch.stack([val_X[i]] for i in range(len(val_X)))
-        val_Y = torch.stack([val_Y[i] for i in range(len(val_Y))])
+        # Convert the generators to lists before stacking
+        train_X = torch.stack(list(train_X))
+        train_Y = torch.stack(list(train_Y))
+        test_X = torch.stack(list(test_X))
+        test_Y = torch.stack(list(test_Y))
+        val_X = torch.stack(list(val_X))  # For validation set
+        val_Y = torch.stack(list(val_Y))  # For validation set
        
         # Creates the dataset
         train_dataset = TensorDataset(train_X, train_Y)
@@ -97,11 +96,10 @@ def calculate_accuracy(outputs, targets, threshold=0.1):
 def train_model(model, train_loader, epochs, lr):
     """Train the model with accuracy and progress tracking."""
     try:
-        combined_loss = initialize_combined_loss(device)
-        combined_loss.to(device)
-        # criterion = torch.nn.MSELoss()
-        optimizer = torch.optim.RMSprop(model.parameters(), lr=lr)
-        
+        criterion = torch.nn.MSELoss()
+        # optimizer = torch.optim.RMSprop(model.parameters(), lr=lr)
+        optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
+
         # Loop for training epochs
         for epoch in range(epochs):
             start_time = time.time()
@@ -112,6 +110,7 @@ def train_model(model, train_loader, epochs, lr):
             # For accurate tracking of progress, eta, loss, accuracy, etc.
             with tqdm(total=total_batches, desc=f"Epoch {epoch+1}/{epochs}") as pbar:
                 for batch_idx, (inputs, targets) in enumerate(train_loader):
+                    print(batch_idx)
                     optimizer.zero_grad()
                     outputs = model(inputs)
 
@@ -120,7 +119,7 @@ def train_model(model, train_loader, epochs, lr):
                     targets_resized = F.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
                     
                     # Calculate loss
-                    loss = combined_loss(outputs_resized, targets_resized)
+                    loss = criterion(outputs_resized, targets_resized)
                     epoch_loss += loss.item()
                     
                     # Calculate accuracy
@@ -149,23 +148,7 @@ def train_model(model, train_loader, epochs, lr):
     except Exception as e:
         print(f"Error during training: {e}")
         return None
-    
-def initialize_combined_loss(device):
-    # Load the pre-trained VGG16 model
-    vgg16 = models.vgg16(pretrained=True).features
-    for param in vgg16.parameters():
-        param.requires_grad = False  # Freeze the VGG16 weights
 
-    # Move the model to the same device as the training
-    vgg16 = vgg16.to(device)
-
-    # Create perceptual loss and combined loss instances
-    perceptual_loss = PerceptualLoss(vgg16)
-    pixel_loss = torch.nn.MSELoss()
-    combined_loss = CombinedLoss(perceptual_loss, pixel_loss)
-
-    return combined_loss
-    
 def save_model(model, save_folder='./trained_model/'):
     """Save the trained model."""
     try:
