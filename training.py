@@ -268,3 +268,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Debugging 1: Epoch 1/1, Loss: 0.0041, Accuracy: 88.88%, Time: 1943.60s
+#   Validation Loss: 0.0042, Validation Accuracy: 88.80%
+#   Evaluation Loss: 0.0041, Average Accuracy: 88.91%
