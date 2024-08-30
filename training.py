@@ -38,7 +38,7 @@ def prepare_data_loaders(X, Y, batch_size):
         
         # Split the dataset
         dataset_size = len(X_tensor)
-        train_size = int(0.2 * dataset_size)
+        train_size = int(0.7 * dataset_size)
         validation_size = int(0.1 * dataset_size)
         test_size = dataset_size - train_size - validation_size
 
@@ -58,9 +58,9 @@ def prepare_data_loaders(X, Y, batch_size):
         train_dataset = TensorDataset(train_X, train_Y)
         test_dataset = TensorDataset(test_X, test_Y)
         validation_dataset = TensorDataset(val_X, val_Y)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=5)
-        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=5)
-        validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False, num_workers=5)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
+        validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True, num_workers=5)
         
         return train_loader, validation_loader, test_loader
     
@@ -140,7 +140,7 @@ def save_model(model, save_folder='./trained_model/'):
             os.makedirs(save_folder)
         
         # Adds model to the model path
-        model_path = os.path.join(save_folder, 'colorization_model1.pth')
+        model_path = os.path.join(save_folder, 'colorization_model2.pth')
         torch.save(model.state_dict(), model_path)
         print(f'Model saved at {model_path}')
 
@@ -226,9 +226,12 @@ def main():
     X, Y = load_and_preprocess_images(folder_path1, folder_path2)
     if X is None or Y is None:
         return
+    # Debugging
+    print(f'X shape: {X.shape}, Y shape: {Y.shape}')
+
 
     # Prepare data loaders
-    train_loader, validation_loader, test_loader = prepare_data_loaders(X, Y, batch_size=256)
+    train_loader, validation_loader, test_loader = prepare_data_loaders(X, Y, batch_size=32)
     if (train_loader is None) or (test_loader is None) or (validation_loader is None):
         return
 
