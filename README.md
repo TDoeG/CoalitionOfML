@@ -6,11 +6,10 @@ This project uses a deep learning model to colorize grayscale images. The model 
 - PyTorch Implementation: Efficient and flexible model training and evaluation using PyTorch.
 - Data Preprocessing: Includes scripts for loading, processing, and preparing images for training and evaluation.
 
-## Plans
+## The DEBUGGER HELP AHHAHAHHAHAHHAAAAA
 - Figure out why the model is outputting grayscale
-    - Most likely fucked in my training.py
-    - Maybe dataset, but not too sure.
-    - Might have to create new model >:(
+    - Something in my training.py that's fucked
+    - OR something in my model.py that's also fucked
 
 ## Project Structure
 ```
