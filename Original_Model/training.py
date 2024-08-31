@@ -9,9 +9,9 @@ import time
 from tqdm import tqdm  # For progress bar
 from torch.utils.data import DataLoader, TensorDataset, random_split
 from skimage import color
-from model import ColorizationModel  # Import the model
-from data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
-from visualization import visualize_prediction # Imports visualization (idk if I even need this function, leave it here ig)
+from Original_Model.model import ColorizationModel  # Import the model
+from Original_Model.data_processing import load_images_from_folder, preprocess_images  # Import data processing functions
+from Original_Model.visualization import visualize_prediction # Imports visualization (idk if I even need this function, leave it here ig)
 from PIL import Image
 
 # Sets device
@@ -110,7 +110,6 @@ def train_model(model, train_loader, epochs, lr):
             # For accurate tracking of progress, eta, loss, accuracy, etc.
             with tqdm(total=total_batches, desc=f"Epoch {epoch+1}/{epochs}") as pbar:
                 for batch_idx, (inputs, targets) in enumerate(train_loader):
-                    print(batch_idx)
                     optimizer.zero_grad()
                     outputs = model(inputs)
 
@@ -139,7 +138,7 @@ def train_model(model, train_loader, epochs, lr):
             avg_accuracy = epoch_accuracy / total_batches
             end_time = time.time()
             epoch_duration = end_time - start_time
-            print(f'Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}, Accuracy: {avg_accuracy:.2f}%, Time: {epoch_duration:.2f}s')
+            print(f'Epoch {epoch+1}/{epochs}, Average Loss: {avg_loss:.4f}, Average Accuracy: {avg_accuracy:.2f}%, Time: {epoch_duration:.2f}s')
         
         # Returns model after epoch loop    
         return model
@@ -157,7 +156,7 @@ def save_model(model, save_folder='./trained_model/'):
             os.makedirs(save_folder)
         
         # Adds model to the model path
-        model_path = os.path.join(save_folder, 'colorization_model2.pth')
+        model_path = os.path.join(save_folder, 'colorization_model3.pth')
         torch.save(model.state_dict(), model_path)
         print(f'Model saved at {model_path}')
 
@@ -254,7 +253,7 @@ def main():
 
 
     # Prepare data loaders
-    train_loader, validation_loader, test_loader = prepare_data_loaders(X, Y, batch_size=32)
+    train_loader, validation_loader, test_loader = prepare_data_loaders(X, Y, batch_size=16)
     if (train_loader is None) or (test_loader is None) or (validation_loader is None):
         return
 

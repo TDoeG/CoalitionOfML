@@ -2,13 +2,13 @@ import cv2
 import torch
 import numpy as np
 from skimage import color
-from model import ColorizationModel  # Import your model
+from Original_Model.model import ColorizationModel  # Import your model
 from PIL import Image
 
 # Function to load the model
 def load_model(model_path, device):
     model = ColorizationModel().to(device)
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
     model.eval()  # Set the model to evaluation mode
     return model
 
@@ -78,7 +78,7 @@ def capture_and_colorize(model, device):
 def main():
     # Load the saved model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model_path = './trained_model/colorization_model1.pth'
+    model_path = './trained_model/colorization_model2.pth'
     model = load_model(model_path, device)
 
     # Capture and colorize the image
