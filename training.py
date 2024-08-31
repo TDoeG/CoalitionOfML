@@ -213,26 +213,32 @@ def evaluate_model(model, test_loader, validation_loader, threshold=0.1):
 def validate_model(model, val_loader, threshold=0.1):
     """Validate the model on the validation set."""
     model.eval()
-    total_loss = 0.0
-    total_accuracy = 0.0
+    val_loss = 0.0
+    val_accuracy = 0.0
+    total_batches = len(val_loader)
     criterion = torch.nn.MSELoss()
     
-    with torch.no_grad():
+    with torch.no_grad():  # Disable gradient calculation for validation
         for inputs, targets in val_loader:
             outputs = model(inputs)
-            outputs_resized = F.interpolate(outputs, size=(100, 100), mode='bilinear', align_corners=False)
-            targets_resized = F.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
+
+            # Resize the outputs and targets to 100x100
+            outputs_resized = torch.nn.functional.interpolate(outputs, size=(100, 100), mode='bilinear', align_corners=False)
+            targets_resized = torch.nn.functional.interpolate(targets, size=(100, 100), mode='bilinear', align_corners=False)
             
-            loss = criterion(outputs_resized, targets_resized).item()
-            total_loss += loss
+            # Calculate loss
+            loss = criterion(outputs_resized, targets_resized)
+            val_loss += loss.item()
 
-            accuracy = calculate_accuracy(outputs_resized, targets_resized, threshold)
-            total_accuracy += accuracy
+            # Calculate accuracy (optional)
+            accuracy = calculate_accuracy(outputs_resized, targets_resized)
+            val_accuracy += accuracy
 
-    average_loss = total_loss / len(val_loader)
-    average_accuracy = total_accuracy / len(val_loader)
-    
-    return average_loss, average_accuracy
+    # Average validation loss and accuracy
+    avg_val_loss = val_loss / total_batches
+    avg_val_accuracy = val_accuracy / total_batches
+
+    return avg_val_loss, avg_val_accuracy
 
 def main():
     # Paths to the folders
