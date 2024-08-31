@@ -1,13 +1,13 @@
 import torch
 import os
 from data_processing import load_cifar10_dataset, create_batches, split_data, normalize_data
-from training import train_model, plot_losses
+from training import train_model, plot_losses, plot_accuracies
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
 root_dir = './New_Model/assets/cifar-10/'
 batch_size = 100
 learning_rate = 0.0001
-epochs = 100
+epochs = 1
 Exp = 1
 
 # Load and process data---------------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ x_train, y_train, x_test, y_test = split_data(ip_data, op_data)
 x_train, x_test, y_train, y_test = normalize_data(x_train, x_test, y_train, y_test)
 
 # Train the model and plot the losses-------------------------------------------------------------------------------------------------
-model, train_loss_container, test_loss_container = train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs)
+model, train_loss_container, test_loss_container, train_acc_container, test_acc_container = train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs)
 
 # Save the trained model--------------------------------------------------------------------------------------------------------------
 model_save_path = 'trained_model.pth'
@@ -33,3 +33,4 @@ print(f'Model saved at {model_path}')
 
 # Plot the losses--------------------------------------------------------------------------------------------------------------------
 plot_losses(train_loss_container, test_loss_container)
+plot_accuracies(train_acc_container, test_acc_container)
