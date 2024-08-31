@@ -4,11 +4,11 @@ from data_processing import load_cifar10_dataset, create_batches, split_data, no
 from training import train_model, plot_losses
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
-root_dir = './assets/NEW_IMAGES/cifar-10-python'
+root_dir = './New_Model/assets/cifar-10/'
 batch_size = 100
 learning_rate = 0.0001
 epochs = 100
-Exp = 0
+Exp = 1
 
 # Load and process data---------------------------------------------------------------------------------------------------------------
 cifar_dataset, num_samples = load_cifar10_dataset(root_dir, batch_size)
