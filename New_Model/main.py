@@ -1,7 +1,8 @@
 import torch
 import os
 from data_processing import load_cifar10_dataset, create_batches, split_data, normalize_data
-from training import train_model, plot_losses, plot_accuracies
+from training import train_model, plot_losses, plot_accuracies, visualize_inputs, visualize_predictions, visualize_ground_truth
+
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
 root_dir = './New_Model/assets/cifar-10/'
@@ -26,11 +27,16 @@ model_save_path = 'trained_model.pth'
 if not os.path.exists('./saved_model/'):
     os.makedirs('./saved_model/')
         
-# Adds model to the model path
+# Adds model to the model path--------------------------------------------------------------------------------------------------------
 model_path = os.path.join('./saved_model', f'G2C_Exp{Exp}Epoch{epochs}.pth')
 torch.save(model.state_dict(), model_path)
 print(f'Model saved at {model_path}')
 
-# Plot the losses--------------------------------------------------------------------------------------------------------------------
+# Plot the losses---------------------------------------------------------------------------------------------------------------------
 plot_losses(train_loss_container, test_loss_container)
 plot_accuracies(train_acc_container, test_acc_container)
+
+# Plot the input images, predictions, and ground truth--------------------------------------------------------------------------------
+visualize_inputs(x_test)
+visualize_predictions(model, x_test)
+visualize_ground_truth(y_test)

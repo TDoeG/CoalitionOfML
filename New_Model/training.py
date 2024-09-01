@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm import tqdm
 from model import ConvNet
 
@@ -101,5 +102,35 @@ def plot_accuracies(train_acc_container, test_acc_container):
     ax[1].set_title('Test Accuracy')
     ax[1].plot(test_acc_container)
     f.tight_layout()
+    plt.show()
+
+def visualize_inputs(x_test, mean=0, std=1):
+    f, ax = plt.subplots(3, 3)
+    f.suptitle('Input')
+    for i in range(3):
+        for j in range(3):
+            # Adjust the indexing to handle batched data
+            tmp = mean + x_test[i].detach().cpu().squeeze().numpy() * std
+            ax[i, j].imshow(tmp.reshape(32, 32).astype(np.uint8), cmap='gray')
+    plt.show()
+
+def visualize_predictions(net, x_test):
+    f, ax = plt.subplots(3, 3)
+    f.suptitle('Predictions')
+    for i in range(3):
+        for j in range(3):
+            # Get the model's prediction and reshape the output
+            tmp = net(x_test[i].unsqueeze(0)).detach().cpu().numpy().reshape(32, 32, 3) * 255
+            ax[i, j].imshow(tmp.astype(np.uint8))
+    plt.show()
+
+def visualize_ground_truth(y_test):
+    f, ax = plt.subplots(3, 3)
+    f.suptitle('Ground-Truth')
+    for i in range(3):
+        for j in range(3):
+            # Adjust the indexing to handle batched data
+            tmp = y_test[i].detach().cpu().numpy() * 255
+            ax[i, j].imshow(tmp.reshape(32, 32, 3).astype(np.uint8))
     plt.show()
 

@@ -6,7 +6,6 @@ __pycache__/
 Original_Model/trained_model/*
 Original_Model/assets/*
 
-New_Model/saved_model/*
 New_Model/assets/cifar-10/*
 
 # C extensions
