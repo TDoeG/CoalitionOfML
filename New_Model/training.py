@@ -9,128 +9,69 @@ from model import ConvNet
 def train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs):
     # Define model, criterion, and optimizer
     net = ConvNet(batch_size)
-    net.cpu()
+    net.cpu() # Change to cuda if NVIDIA
     criterion = nn.MSELoss()
     optimizer = optim.Adam(net.parameters(), lr=learning_rate)
 
     # Training loop
     train_loss_container, test_loss_container = [], []
-    train_acc_container, test_acc_container = [], []
 
-    for e in tqdm(range(epochs), desc="Training Progress", unit="epoch"):
+    # Loop over the number of epochs
+    for e in range(epochs):
+        # Initialize the training and testing loss for the current epoch
         train_loss = 0.0
         test_loss = 0.0
-        correct_train = 0
-        total_train = 0
-        correct_test = 0
-        total_test = 0
 
-        
         # Training phase
-        net.train()
-        for batch, train_data in enumerate(tqdm(x_train, desc=f"Epoch {e+1}/{epochs}", leave=False)):
-            # Get the inputs
-            ip, op = train_data, y_train[batch]
+        # Loop over each batch of training data
+        for batch, train_data in enumerate(x_train):
+            # Extract the input and output (target) data for the current batch
+            ip = train_data  # Input data (grayscale or first channel images)
+            op = y_train[batch]  # Corresponding output data (color images)
 
-            # Ensure target has the same shape as input
-            if op.dim() == 3:  # Check if target lacks batch dimension
-                op = op.unsqueeze(0)
-                
+            # Reset the gradients of the optimizer before backpropagation
             optimizer.zero_grad()
 
+            # Forward pass: Compute the model's output
             model_op = net(ip)
+
+            # Calculate the loss between the model's output and the actual target
             loss = criterion(model_op, op)
+
+            # Accumulate the training loss for the current batch
             train_loss += loss.item()
+
+            # Backward pass: Compute the gradients
             loss.backward()
+
+            # Update the model's parameters using the optimizer
             optimizer.step()
 
-            # Calculate training accuracy
-            _, predicted = torch.max(model_op.data, 1)
-            _, labels = torch.max(op.data, 1)
-            total_train += labels.size(0)
-            correct_train += (predicted == labels).sum().item()
-
-        # Testing phase
-        net.eval()
+        # Testing phase (evaluation)
+        # Disable gradient computation to speed up inference and reduce memory usage
         with torch.no_grad():
-            for batch_test, test_data in enumerate(tqdm(x_test, desc="Testing", leave=False)):
-                ip_test, op_test = test_data, y_test[batch_test]
+            # Loop over each batch of testing data
+            for batch_test, test_data in enumerate(x_test, 0):
+                # Extract the input and output (target) data for the current batch
+                ip_test = test_data  # Input data (grayscale or first channel images)
+                op_test = y_test[batch_test]  # Corresponding output data (color images)
+
+                # Forward pass: Compute the model's output
                 model_op = net(ip_test)
 
-                # Ensure the output shape matches the target shape
-                if model_op.size() != op_test.size():
-                    model_op = model_op.view_as(op_test)
-
+                # Calculate the loss between the model's output and the actual target
                 loss_test = criterion(model_op, op_test)
+
+                # Accumulate the testing loss for the current batch
                 test_loss += loss_test.item()
 
-                # Calculate testing accuracy
-                _, predicted_test = torch.max(model_op.data, 1)
-                _, labels_test = torch.max(op_test.data, 1)
-                total_test += labels_test.size(0)
-                correct_test += (predicted_test == labels_test).sum().item()
-
+        # Store the total training and testing loss for the current epoch in the containers
         train_loss_container.append(train_loss)
         test_loss_container.append(test_loss)
-        train_acc = 100 * correct_train / total_train
-        test_acc = 100 * correct_test / total_test
-        train_acc_container.append(train_acc)
-        test_acc_container.append(test_acc)
 
-        # Print epoch summary
-        print(f'EPOCH: {e+1} | Train_loss: {train_loss:.4f} | Train_acc: {train_acc:.2f}% | 'f'Test_loss: {test_loss:.4f} | Test_acc: {test_acc:.2f}%')
+        # Print the loss for the current epoch
+        print('\rEPOCH: {} | Train_loss: {:.6f} | Test_loss: {:.6f}'.format(e + 1, train_loss, test_loss), end='')
 
+    # Print a message to indicate that training has completed
     print('\nFinished Training')
-
-    return net, train_loss_container, test_loss_container, train_acc_container, test_acc_container
-
-def plot_losses(train_loss_container, test_loss_container):
-    # Plotting the train and test loss as a function of epochs
-    f, ax = plt.subplots(2, 1)
-    ax[0].set_title('Training Loss')
-    ax[0].plot(train_loss_container)
-    ax[1].set_title('Test Loss')
-    ax[1].plot(test_loss_container)
-    f.tight_layout()
-    plt.show()
-
-def plot_accuracies(train_acc_container, test_acc_container):
-    # Plotting the train and test accuracy as a function of epochs
-    f, ax = plt.subplots(2, 1)
-    ax[0].set_title('Training Accuracy')
-    ax[0].plot(train_acc_container)
-    ax[1].set_title('Test Accuracy')
-    ax[1].plot(test_acc_container)
-    f.tight_layout()
-    plt.show()
-
-def visualize_inputs(x_test, mean=0, std=1):
-    f, ax = plt.subplots(3, 3)
-    f.suptitle('Input')
-    for i in range(3):
-        for j in range(3):
-            # Adjust the indexing to handle batched data
-            tmp = mean + x_test[i].detach().cpu().squeeze().numpy() * std
-            ax[i, j].imshow(tmp.reshape(32, 32).astype(np.uint8), cmap='gray')
-    plt.show()
-
-def visualize_predictions(net, x_test):
-    f, ax = plt.subplots(3, 3)
-    f.suptitle('Predictions')
-    for i in range(3):
-        for j in range(3):
-            # Get the model's prediction and reshape the output
-            tmp = net(x_test[i].unsqueeze(0)).detach().cpu().numpy().reshape(32, 32, 3) * 255
-            ax[i, j].imshow(tmp.astype(np.uint8))
-    plt.show()
-
-def visualize_ground_truth(y_test):
-    f, ax = plt.subplots(3, 3)
-    f.suptitle('Ground-Truth')
-    for i in range(3):
-        for j in range(3):
-            # Adjust the indexing to handle batched data
-            tmp = y_test[i].detach().cpu().numpy() * 255
-            ax[i, j].imshow(tmp.reshape(32, 32, 3).astype(np.uint8))
-    plt.show()
-
+    return net, train_loss_container, test_loss_container
