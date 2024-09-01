@@ -1,10 +1,25 @@
-import torch
+# Standard/Neceessary Libraries
 import os
-import matplotlib as plt
-from data_processing import load_cifar10_dataset, create_batches, split_data, normalize_data, transform_and_create_torch_tensors
+import torch
+import matplotlib.pyplot as plt
+
+# Local application/library imports
+from data_processing import (
+    load_cifar10_dataset,
+    create_batches,
+    split_data,
+    normalize_data,
+    transform_and_create_torch_tensors
+)
 from training import train_model
-from visualization import plot_losses, visualize_inputs, visualize_predictions, visualize_ground_truth
+from visualization import (
+    plot_losses,
+    visualize_inputs,
+    visualize_predictions,
+    visualize_ground_truth
+)
 from model import ConvNet
+
 
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
