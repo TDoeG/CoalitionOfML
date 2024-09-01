@@ -4,6 +4,7 @@ import matplotlib as plt
 from data_processing import load_cifar10_dataset, create_batches, split_data, normalize_data, transform_and_create_torch_tensors
 from training import train_model
 from visualization import plot_losses, visualize_inputs, visualize_predictions, visualize_ground_truth
+from model import ConvNet
 
 
 # Set parameters-----------------------------------------------------------------------------------------------------------------------
@@ -46,6 +47,13 @@ print(f'Model saved at {model_path}')
 
 # Plot the losses---------------------------------------------------------------------------------------------------------------------
 plot_losses(train_loss_container, test_loss_container)
+
+# Loads the saved model---------------------------------------------------------------------------------------------------------------
+model_name = f'G2C_Exp{Exp}Epoch{epochs}.pth'
+model_path = f'./New_Model/saved_model/{model_name}'
+model = ConvNet(batch_size)
+model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+model.eval()
 
 # Plot the input images, predictions, and ground truth--------------------------------------------------------------------------------
 visualize_inputs(x_test)

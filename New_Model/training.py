@@ -1,9 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import matplotlib.pyplot as plt
-import numpy as np
-from tqdm import tqdm
 from model import ConvNet
 
 def train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs):
