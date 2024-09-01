@@ -1,4 +1,4 @@
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_losses(train_loss_container, test_loss_container):
@@ -27,7 +27,7 @@ def plot_losses(train_loss_container, test_loss_container):
     # Display the plots
     plt.show()
 
-def visualize_inputs(x_test, mean=0, std=1):
+def visualize_inputs(x_test, mean, std):
     # Create a figure with a 3x3 grid of subplots
     f, ax = plt.subplots(3, 3, figsize=(8, 8))  # 3 rows, 3 columns, with a specified figure size
 

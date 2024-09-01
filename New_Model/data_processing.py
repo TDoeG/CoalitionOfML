@@ -10,6 +10,7 @@ random.seed(42)
 def load_cifar10_dataset(root_dir):
     # Load the CIFAR-10 dataset
     cifar_dataset = dataset_loader.CIFAR10(root=root_dir, train=True, download=True, transform=transforms.ToTensor())
+    cifar_dataset = cifar_dataset.data
     return cifar_dataset
 
 def create_batches(cifar_dataset, batch_size):
@@ -30,11 +31,11 @@ def create_batches(cifar_dataset, batch_size):
 
     batches_grayscale_im = []
     for _ix in range(0, ip_data.shape[0], batch_size):
-         # Slice the grayscale images array to get a batch of size 'batch_size'
+        # Slice the grayscale images array to get a batch of size 'batch_size'
         batch = ip_data[_ix:_ix + batch_size]
         batches_grayscale_im .append(batch)
     ip_data = np.array(batches_grayscale_im)
-
+    
     return ip_data, op_data
 
 def split_data(ip_data, op_data, train_ratio=0.8):
@@ -82,9 +83,9 @@ def normalize_data(x_train, x_test, y_train, y_test):
     x_test[:, :, 0, :, :] = (x_test[:, :, 0, :, :] - mean) / std
 
     # Normalize the output (y_train) by dividing by 255
-    y_train = y_train / 255.0
+    y_train = y_train / 255
 
     # Normalize the output (y_test) by dividing by 255
-    y_test = y_test / 255.0
+    y_test = y_test / 255
 
-    return x_train, x_test, y_train, y_test
+    return x_train, x_test, y_train, y_test, mean, std
