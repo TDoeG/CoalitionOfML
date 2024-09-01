@@ -30,15 +30,18 @@ ax_1[0].set_title('x_train'), ax_1[1].set_title('y_train')
 model, train_loss_container, test_loss_container = train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs)
 
 # Save the trained model--------------------------------------------------------------------------------------------------------------
-model_save_path = 'trained_model.pth'
+# Ensure the directory for saving the model exists
+save_dir = './New_Model/saved_model/'
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
 
-# Makes the folder if it doesn't exist
-if not os.path.exists('./saved_model/'):
-    os.makedirs('./saved_model/')
-        
-# Adds model to the model path--------------------------------------------------------------------------------------------------------
-model_path = os.path.join('./saved_model', f'G2C_Exp{Exp}Epoch{epochs}.pth')
+# Construct the path for saving the model file
+model_path = os.path.join(save_dir, f'G2C_Exp{Exp}Epoch{epochs}.pth')
+
+# Save the model state dictionary
 torch.save(model.state_dict(), model_path)
+
+# Print confirmation message
 print(f'Model saved at {model_path}')
 
 # Plot the losses---------------------------------------------------------------------------------------------------------------------
