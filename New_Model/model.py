@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class ConvNet(nn.Module):
-    def __init__(self, batch_size):
+    def __init__(self,batch_size):
         super(ConvNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
         self.conv2 = nn.Conv2d(16, 32, 3)
@@ -11,7 +11,7 @@ class ConvNet(nn.Module):
         self.linear2 = nn.Linear(512, 3072)
 
     def forward(self, x):
-        batch_size = 100
+        batch_size = 1
         # Encoder Phase
         p1 = F.max_pool2d(self.conv1(x), (2,2))
         p2 = F.max_pool2d(self.conv2(p1), (2,2))
