@@ -61,7 +61,7 @@ def processImage(model,img,batch_size):
     return img, gray_img
 
 def main():
-    model_path = './saved_model/Model(1).pth'
+    model_path = './saved_model/model(1).pth'
     batch_size = 100
     model = load_model(model_path,batch_size)
     openCameraMaybe(model,batch_size)
