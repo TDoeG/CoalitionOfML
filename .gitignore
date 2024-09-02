@@ -7,6 +7,7 @@ Original_Model/trained_model/*
 Original_Model/assets/*
 
 New_Model/assets/cifar-10/*
+New_Model/assets/cifar-100/*
 
 # C extensions
 *.so
