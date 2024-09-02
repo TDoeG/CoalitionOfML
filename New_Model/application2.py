@@ -78,13 +78,12 @@ def processImage(model, img, batch_size):
     with torch.no_grad():
         output = model(data)
     
-    # Since we are processing a single image, output should be of shape [1, channels, height, width]
-    output = output.squeeze(0)  # Remove the batch dimension
-    output = output.permute(1, 2, 0).cpu().numpy() * 255  # Convert to shape [height, width, channels]
+    # Gets output and reshapes np array and converts from normalized into color values
+    tmp = output.detach().cpu().numpy().reshape(32,32,3) * 255
 
     # Ensure values are in the valid range [0, 255]
-    output = np.clip(output, 0, 255).astype(np.uint8)
-    output_bgr = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
+    output2 = np.clip(tmp, 0, 255).astype(np.uint8)
+    output_bgr = cv2.cvtColor(output2, cv2.COLOR_RGB2BGR)
 
     return output_bgr, gray_img
 
