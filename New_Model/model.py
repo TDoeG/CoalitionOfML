@@ -11,7 +11,7 @@ class ConvNet(nn.Module):
         self.linear2 = nn.Linear(512, 3072)
 
     def forward(self, x):
-        batch_size = 1
+        batch_size = 100
         # Encoder Phase
         p1 = F.max_pool2d(self.conv1(x), (2,2))
         p2 = F.max_pool2d(self.conv2(p1), (2,2))
