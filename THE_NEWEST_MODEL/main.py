@@ -52,9 +52,10 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
             _, predicted = torch.max(outputs, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-    print(f'Accuracy of the network on the 10000 test images: {100 * correct / total:.2f}%')
+    accuracy = 100 * correct / total
+    print(f'Accuracy of the network on the 10000 test images: {accuracy:.2f}%')
 
-    torch.save(net.state_dict(), f'./THE_NEWEST_MODEL/Saved_Models/cifar10_cnn_{Experiment}.pth')
+    torch.save(net.state_dict(), f'./THE_NEWEST_MODEL/Saved_Models/{accuracy:.2f}_{Experiment}cifar10_cnn.pth')
 
     dataiter = iter(testloader)
     images, labels = next(dataiter)
