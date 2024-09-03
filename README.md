@@ -32,23 +32,13 @@ Python Version: 3.10
 ```
 
 ## How to Run the Model
-1. **Prepare Data**: Ensure that your dataset
+1. **Prepare Data**: Ensure that your dataset is ready in the assets folder or what not.
 
-2. **Preprocessing Data**: Run `data_preprocessing.py` script to preprocess your images into cleaner, much more ingestible data.
-
-```
-python data_preprocessing.py
-```
-
-
-3. **Train the Model**: Run `main.py` script to train the model on your dataset.
+2. **Train the Model**: Run `main.py` script to download the dataset, run the model, train it, and visualize the precitions from the provided model.
 
 ```
-python training.py
+python main.py
 ```
-
-4. **Predict and Visualize**: The script will also handle predicting the colors for a sample image and visualize the results.
-Make sure to update the path_to_image in training.py to the path of an image you want to test the model on.
 
 ## Usage
 After training the model, you can use it to colorize new grayscale images. Update the path_to_image variable in training.py to the path of the grayscale image you wish to colorize. The script will handle preprocessing, prediction, and visualization of the output.
