@@ -36,4 +36,3 @@ class Net(nn.Module):
         x = self.dropout(x)
         x = self.fc3(x)
         return x
-net = Net()

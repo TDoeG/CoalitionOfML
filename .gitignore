@@ -9,6 +9,8 @@ Original_Model/assets/*
 New_Model/assets/cifar-10/*
 New_Model/assets/cifar-100/*
 
+THE_NEWEST_MODEL/data/*
+
 # C extensions
 *.so
 
