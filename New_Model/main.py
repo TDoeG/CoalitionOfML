@@ -27,7 +27,7 @@ root_dir = './assets/cifar-10/'
 batch_size = 100
 learning_rate = 0.0001
 epochs = 50
-Exp = 2
+Exp = 3
 
 # Load and process data---------------------------------------------------------------------------------------------------------------
 cifar_dataset = load_cifar10_dataset(root_dir) # Loads dataset
@@ -64,8 +64,8 @@ plot_losses(train_loss_container, test_loss_container, "Losses")
 plot_losses(train_accuracy_container, test_accuracy_container, "Accuracy")
 
 # Loads the saved model---------------------------------------------------------------------------------------------------------------
-#model_name = f'G2C_Exp{Exp}Epoch{epochs}.pth'
-model_name = 'model(2).pth'
+model_name = f'G2C_Exp{Exp}Epoch{epochs}.pth'
+#model_name = 'model(2).pth'
 model_path = f'./saved_model/{model_name}'
 model = ConvNet(batch_size)
 model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=True))
