@@ -1,24 +1,24 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_losses(train_loss_container, test_loss_container):
+def plot_losses(train_loss_container, test_loss_container, name):
     # Create a figure and a set of subplots
     f, ax = plt.subplots(2, 1, figsize=(8, 6))  # 2 rows, 1 column, with a specified figure size
 
     # Plot the training loss
     # ax[0] is the first subplot, which will display the training loss over epochs
-    ax[0].set_title('Training Loss')  # Set the title of the first subplot
+    ax[0].set_title(f'Training {name}')  # Set the title of the first subplot
     ax[0].plot(train_loss_container, color='blue', linestyle='-', marker='o', markersize=4)  # Plot the training loss with a line plot
     ax[0].set_xlabel('Epochs')  # Label the x-axis as 'Epochs'
-    ax[0].set_ylabel('Loss')  # Label the y-axis as 'Loss'
+    ax[0].set_ylabel(f'{name}')  # Label the y-axis as 'Loss'
     ax[0].grid(True)  # Enable the grid for better visualization
 
     # Plot the testing loss
     # ax[1] is the second subplot, which will display the test loss over epochs
-    ax[1].set_title('Test Loss')  # Set the title of the second subplot
+    ax[1].set_title(f'Test {name}')  # Set the title of the second subplot
     ax[1].plot(test_loss_container, color='red', linestyle='-', marker='o', markersize=4)  # Plot the test loss with a line plot
     ax[1].set_xlabel('Epochs')  # Label the x-axis as 'Epochs'
-    ax[1].set_ylabel('Loss')  # Label the y-axis as 'Loss'
+    ax[1].set_ylabel(f'{name}')  # Label the y-axis as 'Loss'
     ax[1].grid(True)  # Enable the grid for better visualization
 
     # Adjust the layout so that subplots fit into the figure area without overlapping

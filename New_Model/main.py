@@ -26,8 +26,8 @@ from model import ConvNet
 root_dir = './assets/cifar-10/'
 batch_size = 100
 learning_rate = 0.0001
-epochs = 1
-Exp = 1
+epochs = 50
+Exp = 2
 
 # Load and process data---------------------------------------------------------------------------------------------------------------
 cifar_dataset = load_cifar10_dataset(root_dir) # Loads dataset
@@ -46,7 +46,7 @@ x_train, y_train, x_test, y_test = map(lambda data: transform_and_create_torch_t
 x_train, x_test, y_train, y_test, mean, std = normalize_data(x_train, x_test, y_train, y_test)
 
 # Train the model and plot the losses-------------------------------------------------------------------------------------------------
-model, train_loss_container, test_loss_container = train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs)
+model, train_loss_container, test_loss_container, test_accuracy_container, train_accuracy_container = train_model(x_train, y_train, x_test, y_test, batch_size, learning_rate, epochs)
 
 # Save the trained model--------------------------------------------------------------------------------------------------------------
 # Ensure the directory for saving the model exists
@@ -60,11 +60,12 @@ torch.save(model.state_dict(), model_path)
 print(f'Model saved at {model_path}')
 
 # Plot the losses---------------------------------------------------------------------------------------------------------------------
-plot_losses(train_loss_container, test_loss_container)
+plot_losses(train_loss_container, test_loss_container, "Losses")
+plot_losses(train_accuracy_container, test_accuracy_container, "Accuracy")
 
 # Loads the saved model---------------------------------------------------------------------------------------------------------------
 #model_name = f'G2C_Exp{Exp}Epoch{epochs}.pth'
-model_name = 'model(1).pth'
+model_name = 'model(2).pth'
 model_path = f'./saved_model/{model_name}'
 model = ConvNet(batch_size)
 model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=True))

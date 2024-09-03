@@ -76,7 +76,7 @@ def processImage(model, img, batch_size):
 
     # Get the model prediction for the image
     with torch.no_grad():
-        output = model(data)
+        output = model(data, batch_size)
     
     # Gets output and reshapes np array and converts from normalized into color values
     tmp = output.detach().cpu().numpy().reshape(32,32,3) * 255
@@ -88,7 +88,7 @@ def processImage(model, img, batch_size):
     return output_bgr, gray_img
 
 def main():
-    batch_size = 100
+    batch_size = 1
     model_path = './New_Model/saved_model/model(2).pth'
     model = load_model(model_path, batch_size)
     open_camera(model)
