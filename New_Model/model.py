@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class ConvNet(nn.Module):
+"""class ConvNet(nn.Module):
     def __init__(self,batch_size):
         super(ConvNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
@@ -18,8 +18,8 @@ class ConvNet(nn.Module):
         f1 = F.relu(self.linear1(p2.view(batch_size,-1)))
         f2 = torch.sigmoid(self.linear2(f1)).view(-1, 3, 32, 32)
         return f2
-
-"""class ConvNet(nn.Module):
+"""
+class ConvNet(nn.Module):
     def __init__(self, batch_size):
         super(ConvNet, self).__init__()
         self.batch_size = batch_size
@@ -56,4 +56,4 @@ class ConvNet(nn.Module):
         x = self.dropout(x)
         x = torch.sigmoid(self.fc2(x)).view(-1, 3, 32, 32)
         
-        return x"""
+        return x
