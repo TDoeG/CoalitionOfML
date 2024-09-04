@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -94,7 +95,15 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
     accuracy = 100 * correct / total
     print(f'Accuracy of the network on the 10000 test images: {accuracy:.2f}%')
 
-    torch.save(net.state_dict(), f'./THE_NEWEST_MODEL/Saved_Models/{accuracy:.2f}_{Experiment}cifar10_cnn.pth')
+
+    # Specify the path for the folder
+    folder_path = f'./THE_NEWEST_MODEL/Saved_Models/Experiment_{Experiment}'
+
+    # Check if the folder exists, if not, create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    
+    torch.save(net.state_dict(), f'./THE_NEWEST_MODEL/Saved_Models/Experiment_{Experiment}/{accuracy:.2f}_{Experiment}cifar10_cnn.pth')
 
     dataiter = iter(testloader)
     images, labels = next(dataiter)
@@ -112,10 +121,10 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 
 if __name__ == '__main__':
     main(
-        Batch_Size=64,
+        Batch_Size=100,
         Epochs=20,
         Learning_Rate=0.001,
-        Experiment=6
+        Experiment=7
     )
 
     # Experiment 3 with 10 epochs, weighted decay 1e-4 | Acc: 64.04%
@@ -128,5 +137,6 @@ if __name__ == '__main__':
     # Experiment 5 with weighted decay & validation set | Acc: 76.34%
     # Experiment 5 w/o weighted decay & validation set | Acc: 77.98%
     # Experiment 6 with 64 batch size 70, 15, 15 split | Acc: 77.59%
-    # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 
+    # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 80.00%
+    # Experiment 7 with 100 batch size | Acc: 
 
