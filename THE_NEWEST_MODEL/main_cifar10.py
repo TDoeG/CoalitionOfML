@@ -6,6 +6,7 @@ import torch.utils.data
 import torchvision
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 from model import Net
 
 def main(Batch_Size, Epochs, Learning_Rate, Experiment):
@@ -21,50 +22,68 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
         # testset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=False, download=True, transform=transform)
         # testloader = torch.utils.data.DataLoader(testset, Batch_Size, shuffle=False, num_workers=2)
 
-    # Splits dataset into 80% train, 20% test
+    # Splits dataset into 70% train, 15% , 15% validation
     train_len = int(len(dataset) * 0.8)
-    test_len = len(dataset) - train_len
-    train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_len, test_len])
+    test_len = int(len(dataset) * 0.1)
+    val_len = len(dataset) - train_len - test_len
+    train_dataset, test_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_len, test_len, val_len])
     trainloader = torch.utils.data.DataLoader(train_dataset, Batch_Size, shuffle=True, num_workers=2)
     testloader = torch.utils.data.DataLoader(test_dataset, Batch_Size, shuffle=False, num_workers=2)
+    valLoader = torch.utils.data.DataLoader(val_dataset, Batch_Size, shuffle=False, num_workers=2)
 
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
     net = Net()
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(net.parameters(), Learning_Rate, weight_decay=1e-4)
+    optimizer = optim.Adam(net.parameters(), Learning_Rate)
 
     correct = 0
     total = 0
 
     for epoch in range(Epochs):
-        running_loss=0.0
-        for i, data in enumerate(trainloader, 0):
+        net.train()
+        running_loss = 0.0
+        correct = 0
+        total = 0
+
+        # Initialize tqdm progress bar
+        progress_bar = tqdm(trainloader, desc=f"Epoch {epoch+1}/{Epochs}", unit="batch")
+        
+        for i, data in enumerate(progress_bar):
             inputs, labels = data
             optimizer.zero_grad()
             outputs = net(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+
             running_loss += loss.item()
-            if i % 100 == 99:
-                # print(f'Epoch {epoch+1}, Batch {i+1}, Loss: {running_loss/100:.3f}')
-                # running_loss = 0.0
-                with torch.no_grad():
-                    for data in testloader:
-                        images, labels = data
-                        outputs = net(images)
-                        _, predicted = torch.max(outputs, 1)
-                        total += labels.size(0)
-                        correct += (predicted == labels).sum().item()
-                    accuracy = 100 * correct / total
-                    print(f'Epoch {epoch+1}, Batch {i+1}, Loss: {running_loss/100:.3f}, Accuracy: {accuracy:.2f}%')
-                    running_loss = 0.0
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+            # Update tqdm with loss and accuracy information
+            progress_bar.set_postfix(loss=running_loss/(i+1), accuracy=100.*correct/total)
+
+        # Validation accuracy after each epoch
+        net.eval()
+        val_correct = 0
+        val_total = 0
+        with torch.no_grad():
+            for data in valLoader:
+                images, labels = data
+                outputs = net(images)
+                _, predicted = torch.max(outputs, 1)
+                val_total += labels.size(0)
+                val_correct += (predicted == labels).sum().item()
+        val_accuracy = 100. * val_correct / val_total
+        print(f"Validation Accuracy after Epoch {epoch+1}: {val_accuracy:.2f}%")
     print('Finished Training')
 
     correct = 0
     total = 0
 
+    net.eval()
     with torch.no_grad():
         for data in testloader:
             images, labels = data
@@ -93,10 +112,10 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 
 if __name__ == '__main__':
     main(
-        Batch_Size=100,
+        Batch_Size=64,
         Epochs=20,
         Learning_Rate=0.001,
-        Experiment=5
+        Experiment=6
     )
 
     # Experiment 3 with 10 epochs, weighted decay 1e-4 | Acc: 64.04%
@@ -106,4 +125,8 @@ if __name__ == '__main__':
     # Experiment 4 with 20 epochs | Acc: 71.61%
     # Experiment 4 with 20 epochs | Acc: 70.05%
     # Experiment 5 with same settings, diff model | Acc: 77.83%!! USING THIS MODEL
-    # Experiment 5 with 
+    # Experiment 5 with weighted decay & validation set | Acc: 76.34%
+    # Experiment 5 w/o weighted decay & validation set | Acc: 77.98%
+    # Experiment 6 with 64 batch size 70, 15, 15 split | Acc: 77.59%
+    # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 
+
