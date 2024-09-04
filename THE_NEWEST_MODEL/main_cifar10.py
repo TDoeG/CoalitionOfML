@@ -121,7 +121,7 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 
 if __name__ == '__main__':
     main(
-        Batch_Size=100,
+        Batch_Size=128,
         Epochs=20,
         Learning_Rate=0.001,
         Experiment=7
@@ -138,5 +138,6 @@ if __name__ == '__main__':
     # Experiment 5 w/o weighted decay & validation set | Acc: 77.98%
     # Experiment 6 with 64 batch size 70, 15, 15 split | Acc: 77.59%
     # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 80.00%
-    # Experiment 7 with 100 batch size | Acc: 
+    # Experiment 7 with 100 batch size | Acc: 76.60%
+    # Experiment 7 with 128 batch size | Acc: 
 
