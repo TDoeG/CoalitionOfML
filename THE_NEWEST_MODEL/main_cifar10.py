@@ -23,7 +23,7 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
         # testset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=False, download=True, transform=transform)
         # testloader = torch.utils.data.DataLoader(testset, Batch_Size, shuffle=False, num_workers=2)
 
-    # Splits dataset into 70% train, 15% , 15% validation
+    # Splits dataset into 80% train, 10% , 10% validation
     train_len = int(len(dataset) * 0.8)
     test_len = int(len(dataset) * 0.1)
     val_len = len(dataset) - train_len - test_len
@@ -121,7 +121,7 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 
 if __name__ == '__main__':
     main(
-        Batch_Size=128,
+        Batch_Size=64,
         Epochs=20,
         Learning_Rate=0.001,
         Experiment=7
@@ -139,5 +139,6 @@ if __name__ == '__main__':
     # Experiment 6 with 64 batch size 70, 15, 15 split | Acc: 77.59%
     # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 80.00%
     # Experiment 7 with 100 batch size | Acc: 76.60%
-    # Experiment 7 with 128 batch size | Acc: 
+    # Experiment 7 with 128 batch size | Acc: 77.70%
+    # Experiment 7 with 64 batch size | Acc: 
 
