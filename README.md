@@ -6,14 +6,15 @@ These projects uses deep learning/convolution neural networks in order to do var
 - PyTorch Implementation: Efficient and flexible model training and evaluation using PyTorch.
 
 ## File Structure
-The project file structure is broken into three main folders: **Original_Model** and **New_Model**. The Original Model is deprecated and doesn't work as the approach to the neural network is not good. The New Model is the new and working apporach to the neural network and is only trained on the CIFAR-10 dataset (32x32 images).
+The project file structure is broken into three main folders: **Original_Model**, **New_Model**, and **THE_NEWEST_MODEL**. The Original Model is deprecated and doesn't work as the approach to the neural network is not good. The New Model is the new and working apporach to the neural network and is only trained on the CIFAR-10 dataset (32x32 images).
 
 ### > Original and New Model
 The Original Model and the New Model both have folders that contains saved models/trained models, after the training process. Each model has an assets folder containing the assets (or planned assets) we want to use during our training/testing of the models.
 
 The Original Model is less organized than the New Model, as each section is split up into different python files for easier debugging and reading.
-
-***These folders/models are abandoned/deprecated/obsolete since these models use the CIFAR-10 dataset to predict the color space of an grayscale image. WE ARE NO LONGER WORKING ON THESE. These models are not guarenteed to work at all.***
+```
+These folders/models are abandoned/deprecated/obsolete since these models use the CIFAR-10 dataset to predict the color space of an grayscale image. WE ARE NO LONGER WORKING ON THESE. These models are not guarenteed to work at all.
+```
 
 ### > The Newest Model
 The Newest Model has a data folder, which contains the CIFAR-10 and the CIFAR-100 datasets. The saved models are saved in Saved_Models. There are 3 main files:
