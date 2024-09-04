@@ -32,7 +32,7 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 
     net = Net()
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(net.parameters(), Learning_Rate)
+    optimizer = optim.Adam(net.parameters(), Learning_Rate, weight_decay=1e-4)
 
     correct = 0
     total = 0
@@ -105,4 +105,5 @@ if __name__ == '__main__':
     # Experiment 3 with 20 epochs, LR 0.0001 | Acc: 63.92%
     # Experiment 4 with 20 epochs | Acc: 71.61%
     # Experiment 4 with 20 epochs | Acc: 70.05%
-    # Experiment 5 with same settings, diff model | Acc: 77.83%!! USE THIS MODEL
+    # Experiment 5 with same settings, diff model | Acc: 77.83%!! USING THIS MODEL
+    # Experiment 5 with 

@@ -19,7 +19,7 @@ These folders/models are abandoned/deprecated/obsolete since these models use th
 ### > The Newest Model
 The Newest Model has a data folder, which contains the CIFAR-10 and the CIFAR-100 datasets. The saved models are saved in Saved_Models. There are 3 main files:
 
-- main.py & main_backup.py : *These files contains the loading of the dataset, training the model, and saving the model into the local folder.*
+- main_cifar10.py & main_cifar100.py : *These files contains the loading of the dataset, training the model, and saving the model into the local folder. Each respectively trains the model on the cifar10 and cifar100 dataset*
 
 - model.py : *This file contains the convolutional neural network used to classify the CIFAR-10 dataset to an specified accuracy.*
 

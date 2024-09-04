@@ -72,7 +72,7 @@ def plot_results(images, actual_classes, predicted_classes, classes):
 def main():
     # Load dataset and model
     dataset_name = 'CIFAR10'  # Change to 'CIFAR100' if you want to use CIFAR-100
-    model_path = './THE_NEWEST_MODEL/Saved_Models/72.34_3cifar10_cnn.pth'  # Replace with your actual model path
+    model_path = './THE_NEWEST_MODEL/Saved_Models/77.83_5cifar10_cnn.pth'  # Replace with your actual model path
     dataset, classes = load_dataset(dataset_name)
     model = load_model(model_path)
 
