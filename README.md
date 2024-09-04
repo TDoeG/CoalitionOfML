@@ -12,9 +12,9 @@ The project file structure is broken into three main folders: **Original_Model**
 The Original Model and the New Model both have folders that contains saved models/trained models, after the training process. Each model has an assets folder containing the assets (or planned assets) we want to use during our training/testing of the models.
 
 The Original Model is less organized than the New Model, as each section is split up into different python files for easier debugging and reading.
-```
-These folders/models are abandoned/deprecated/obsolete since these models use the CIFAR-10 dataset to predict the color space of an grayscale image. WE ARE NO LONGER WORKING ON THESE. These models are not guarenteed to work at all.
-```
+
+> These folders/models are **abandoned/deprecated/obsolete** since these models use the CIFAR-10 dataset to predict the color space of an grayscale image. WE ARE NO LONGER WORKING ON THESE. These models are not guarenteed to work at all.
+
 
 ### > The Newest Model
 The Newest Model has a data folder, which contains the CIFAR-10 and the CIFAR-100 datasets. The saved models are saved in Saved_Models. There are 3 main files:
@@ -25,23 +25,26 @@ The Newest Model has a data folder, which contains the CIFAR-10 and the CIFAR-10
 
 - demo.py : *This file contains the demo portion of the model, made for presentational work for a general audience.*
 
+Saved Model Naming Convention: 
+
+- First four digits: Accuracy
+- Fifth digit: Experiment Number
+- Rest of Name: The Model Name (cifar10_cnn)
+
 ## Installation
 Use the following command to install the dependecies (Old dependencies):
 
 ```
-pip install numpy torch torchvision scikit-image opencv-python pillow matplotlib
+pip install numpy torch torchvision opencv-python pillow matplotlib
 ```
 - NumPy: For numerical operations and array manipulation.
 - PyTorch: The core deep learning library for building and training the model.
 - TorchVision: Provides utilities for image processing and loading.
-- scikit-image: Used for image processing tasks such as converting RGB to LAB and grayscale.
 - OpenCV: For image manipulation tasks such as resizing.
 - Pillow: For opening and processing images.
 - Matplotlib: For visualizing the results.
 
-```
-Python Version: 3.10
-```
+> Python Version: 3.10
 
 ## How to Run the Model
 1. **Prepare Data**: Ensure that your dataset is ready in the assets folder or what not.
