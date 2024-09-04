@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.utils
+import torch.utils.data
 import torchvision
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
@@ -14,18 +16,26 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
     ])
 
     # Load the CIFAR-10 dataset
-    trainset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, Batch_Size, shuffle=True, num_workers=2)
+    dataset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=True, download=True, transform=transform)
+        # trainloader = torch.utils.data.DataLoader(trainset, Batch_Size, shuffle=True, num_workers=2)
+        # testset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=False, download=True, transform=transform)
+        # testloader = torch.utils.data.DataLoader(testset, Batch_Size, shuffle=False, num_workers=2)
 
-    testset = torchvision.datasets.CIFAR10(root='./THE_NEWEST_MODEL/data', train=False, download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, Batch_Size, shuffle=False, num_workers=2)
+    # Splits dataset into 80% train, 20% test
+    train_len = int(len(dataset) * 0.8)
+    test_len = len(dataset) - train_len
+    train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_len, test_len])
+    trainloader = torch.utils.data.DataLoader(train_dataset, Batch_Size, shuffle=True, num_workers=2)
+    testloader = torch.utils.data.DataLoader(test_dataset, Batch_Size, shuffle=False, num_workers=2)
 
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
     net = Net()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), Learning_Rate)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
+    correct = 0
+    total = 0
 
     for epoch in range(Epochs):
         running_loss=0.0
@@ -38,9 +48,18 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
             optimizer.step()
             running_loss += loss.item()
             if i % 100 == 99:
-                print(f'Epoch {epoch+1}, Batch {i+1}, Loss: {running_loss/100:.3f}')
-                running_loss = 0.0
-                scheduler.step()
+                # print(f'Epoch {epoch+1}, Batch {i+1}, Loss: {running_loss/100:.3f}')
+                # running_loss = 0.0
+                with torch.no_grad():
+                    for data in testloader:
+                        images, labels = data
+                        outputs = net(images)
+                        _, predicted = torch.max(outputs, 1)
+                        total += labels.size(0)
+                        correct += (predicted == labels).sum().item()
+                    accuracy = 100 * correct / total
+                    print(f'Epoch {epoch+1}, Batch {i+1}, Loss: {running_loss/100:.3f}, Accuracy: {accuracy:.2f}%')
+                    running_loss = 0.0
     print('Finished Training')
 
     correct = 0
@@ -77,8 +96,13 @@ if __name__ == '__main__':
         Batch_Size=100,
         Epochs=20,
         Learning_Rate=0.001,
-        Experiment=3
+        Experiment=5
     )
 
-    # Experiement 3 with 10 epochs, weighted decay 1e-4 | Acc: 64.04%
-    # Experiement 3 with 20 epochs | Acc: 
+    # Experiment 3 with 10 epochs, weighted decay 1e-4 | Acc: 64.04%
+    # Experiment 3 with 20 epochs | Acc: 63.19%
+    # Experiment 3 with 20 epochs, no scheduler | Acc: 71.73%
+    # Experiment 3 with 20 epochs, LR 0.0001 | Acc: 63.92%
+    # Experiment 4 with 20 epochs | Acc: 71.61%
+    # Experiment 4 with 20 epochs | Acc: 70.05%
+    # Experiment 5 with same settings, diff model | Acc: 77.83%!! USE THIS MODEL
