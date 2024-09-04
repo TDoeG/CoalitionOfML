@@ -93,7 +93,7 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
     accuracy = 100 * correct / total
-    print(f'Accuracy of the network on the 10000 test images: {accuracy:.2f}%')
+    print(f'Accuracy of the network on the 5000 test images: {accuracy:.2f}%')
 
 
     # Specify the path for the folder
