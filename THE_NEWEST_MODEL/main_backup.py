@@ -75,7 +75,10 @@ def main(Batch_Size, Epochs, Learning_Rate, Experiment):
 if __name__ == '__main__':
     main(
         Batch_Size=100,
-        Epochs=10,
+        Epochs=20,
         Learning_Rate=0.001,
         Experiment=3
     )
+
+    # Experiement 3 with 10 epochs, weighted decay 1e-4 | Acc: 64.04%
+    # Experiement 3 with 20 epochs | Acc: 
