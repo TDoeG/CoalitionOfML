@@ -140,5 +140,5 @@ if __name__ == '__main__':
     # Experiment 6 with 64 batch size, 80, 10, 10 split | Acc: 80.00%
     # Experiment 7 with 100 batch size | Acc: 76.60%
     # Experiment 7 with 128 batch size | Acc: 77.70%
-    # Experiment 7 with 64 batch size | Acc: 
+    # Experiment 7 with 64 batch size | Acc: 79.16%
 
