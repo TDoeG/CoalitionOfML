@@ -6,14 +6,14 @@
     <title>Prediction Result</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<body id="res">
     <h1>Prediction Result</h1>
-    <p>The uploaded image is classified as: <strong>{{ predicted_class }}</strong></p>
+    <p>The uploaded image is classified as: <strong><span style="text-transform:uppercase;">{{ predicted_class }}</span></strong></p>
 
     <!-- Display the uploaded image -->
     <div>
         <h2>Uploaded Image:</h2>
-        <img src="{{ url_for('static', filename=image_url) }}" alt="Uploaded Image" style="width: 500px; height: 500px;">
+        <img src="{{ url_for('static', filename=image_url) }}" alt="Uploaded Image" style="width: 550px; height: 400px;">
     </div>
 
     <a href="/">Upload another image</a>
