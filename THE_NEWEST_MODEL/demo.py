@@ -4,6 +4,7 @@ import torchvision
 import torchvision.transforms as transforms
 import random
 import matplotlib.pyplot as plt
+from PIL import Image
 from model import Net  # Assuming model.py is in the same directory
 
 # Load the CIFAR-10 or CIFAR-100 dataset
@@ -42,7 +43,7 @@ def load_model(model_path):
     return model
 
 # Grab 3 random images from the dataset and get their predicted classes
-def predict_random_images(model, dataset, classes, num_images=3):
+def predict_random_images(model, dataset, classes, num_images=4):
     images, labels, predictions = [], [], []
     for _ in range(num_images):
         random_idx = random.randint(0, len(dataset) - 1)
@@ -58,6 +59,19 @@ def predict_random_images(model, dataset, classes, num_images=3):
         predictions.append(predicted.item())
     
     return images, labels, predictions
+
+# Load and preprocess an uploaded image
+def load_and_preprocess_image(image_path, transform):
+    image = Image.open(image_path).convert('RGB')
+    image = transform(image)
+    return image.unsqueeze(0)  # Add batch dimension
+
+# Predict the class of a single image
+def predict_image(model, image_tensor, classes):
+    with torch.no_grad():
+        output = model(image_tensor)
+        _, predicted = torch.max(output, 1)
+    return predicted.item()
 
 # Plot the images with their actual and predicted classes
 def plot_results(images, actual_classes, predicted_classes, classes):
@@ -77,13 +91,23 @@ def main():
     model = load_model(model_path)
 
     while True:
-        # Predict 3 random images and plot the results
-        images, actual_classes, predicted_classes = predict_random_images(model, dataset, classes, num_images=3)
-        plot_results(images, actual_classes, predicted_classes, classes)
-
-        # Wait for user input
-        user_input = input("Press 'N' to show 3 more images or any other key to exit: ").strip().lower()
-        if user_input != 'n':
+        user_input = input("Enter 'R' to show 3 random images or 'U' to upload an image: ").strip().lower()
+        if user_input == 'r':
+            # Predict 3 random images and plot the results
+            images, actual_classes, predicted_classes = predict_random_images(model, dataset, classes, num_images=3)
+            plot_results(images, actual_classes, predicted_classes, classes)
+        elif user_input == 'u':
+            # Upload and predict an image
+            image_path = input("Enter the path to the image: ").strip()
+            transform = transforms.Compose([
+                transforms.Resize((32, 32)),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),  # CIFAR-100 mean and std
+            ])
+            image_tensor = load_and_preprocess_image(image_path, transform)
+            predicted_class = predict_image(model, image_tensor, classes)
+            print(f'Predicted class: {classes[predicted_class]}')
+        else:
             break
 
 if __name__ == '__main__':
