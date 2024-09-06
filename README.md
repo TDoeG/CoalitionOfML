@@ -1,5 +1,5 @@
 # ImageClassificationUsingCNN
-This repository contains deep learning projects that utilize convolutional neural networks (CNNs) to classify images. The focus is on image classification, particularly using the CIFAR-10 dataset (with plans to extend to CIFAR-100 in the future).
+This repository contains deep learning projects that utilize convolutional neural networks (CNNs) to classify images. The focus is on image classification, particularly using the CIFAR-10 dataset (with plans to extend to CIFAR-100 in the future). This is for UCSD's SPIS 2024 final project, but also is a personal project.
 
 ## Features
 - **Deep Learning Model**: Implements a convolutional neural network for image classification.
