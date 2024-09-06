@@ -1,19 +1,21 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os
+import sys
 import torch
 from torchvision import transforms
 from PIL import Image
+sys.path.append(os.path.abspath('./THE_NEWEST_MODEL'))
 from model import Net  # Assuming model.py is in the same directory
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
 # Directory to store uploaded images
-UPLOAD_FOLDER = 'The_Newest_model/static/uploads/'
+UPLOAD_FOLDER = 'The_Newest_model/Web_Application/static/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Load model
-model_path = './THE_NEWEST_MODEL/Saved_Models/80.00_6cifar10_cnn.pth'  # Replace with your actual model path
+model_path = 'THE_NEWEST_MODEL/Saved_Models/80.00_6cifar10_cnn.pth'  # Replace with your actual model path
 model = Net()
 model.load_state_dict(torch.load(model_path))
 model.eval()  # Set the model to evaluation mode

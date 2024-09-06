@@ -3,14 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-Original_Model/trained_model/*
-Original_Model/assets/*
-
-New_Model/assets/cifar-10/*
-New_Model/assets/cifar-100/*
-
 THE_NEWEST_MODEL/data/*
-THE_NEWEST_MODEL/static/uploads/*
+THE_NEWEST_MODEL/Web_Application/static/uploads/*
 
 # C extensions
 *.so
