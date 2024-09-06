@@ -1,56 +1,51 @@
 # CoalitionOfML
-These projects uses deep learning/convolution neural networks in order to do various goals. The folders named **Original_Model** and **New_Model** are used for grayscale images to color conversion using deep learning neural networks. The folder named **THE_NEWEST_MODEL** pertains the classification of the CIFAR-10 dataset. (In the future, the CIFAR-100 dataset)
+This repository contains deep learning projects that utilize convolutional neural networks (CNNs) to achieve various tasks. The focus is on image classification, particularly using the CIFAR-10 dataset (with plans to extend to CIFAR-100 in the future).
 
 ## Features
-- Deep Learning Model: Implements an encoder-decoder network for image colorization.
-- PyTorch Implementation: Efficient and flexible model training and evaluation using PyTorch.
+- **Deep Learning Model**: Implements a convolutional neural network for image classification.
+- **PyTorch Implementation**: Efficient and flexible model training and evaluation using PyTorch.
 
 ## File Structure
-The project file structure is broken into three main folders: **Original_Model**, **New_Model**, and **THE_NEWEST_MODEL**. The Original Model is deprecated and doesn't work as the approach to the neural network is not good. The New Model is the new and working apporach to the neural network and is only trained on the CIFAR-10 dataset (32x32 images).
+The project is organized into the following main folder:
 
-### > Original and New Model
-The Original Model and the New Model both have folders that contains saved models/trained models, after the training process. Each model has an assets folder containing the assets (or planned assets) we want to use during our training/testing of the models.
+### THE_NEWEST_MODEL
+This folder focuses on classifying images from the CIFAR-10 dataset using a convolutional neural network. The model assigns images to one of 10 classes. The folder contains the following key components:
 
-The Original Model is less organized than the New Model, as each section is split up into different python files for easier debugging and reading.
+- `data/`: Contains the CIFAR-10 and CIFAR-100 datasets.
 
-> These folders/models are **abandoned/deprecated/obsolete** since these models use the CIFAR-10 dataset to predict the color space of an grayscale image. WE ARE NO LONGER WORKING ON THESE. These models are not guarenteed to work at all.
+- `Saved_Models/`: Stores the trained models.
 
+- `main_cifar10.py` & `main_cifar100.py`: These scripts handle dataset loading, model training, and saving the trained model locally. `main_cifar10.py` is used for CIFAR-10, while `main_cifar100.py` will be used for CIFAR-100.
 
-### > The Newest Model
-The Newest Model has a data folder, which contains the CIFAR-10 and the CIFAR-100 datasets. The saved models are saved in Saved_Models. There are 3 main files:
+- `model.py`: Defines the convolutional neural network architecture used for classification.
 
-- main_cifar10.py & main_cifar100.py : *These files contains the loading of the dataset, training the model, and saving the model into the local folder. Each respectively trains the model on the cifar10 and cifar100 dataset*
+- `demo.py`: Demonstrates the model by randomly selecting images from the CIFAR-10 or CIFAR-100 dataset and classifying them using the trained model.
 
-- model.py : *This file contains the convolutional neural network used to classify the CIFAR-10 dataset to an specified accuracy.*
-
-- demo.py : *This file contains the demo portion of the model, made for presentational work for a general audience.*
-
-Saved Model Naming Convention: 
-
-- First four digits: Accuracy
-- Fifth digit: Experiment Number
-- Rest of Name: The Model Name (cifar10_cnn)
-
+#### Saved Model Naming Convention:
+- **First four digits**: Accuracy
+- **Fifth digit**: Experiment Number
+- **Rest of the name**: Model Name (e.g., cifar10_cnn)
 ## Installation
-Use the following command to install the dependecies (Old dependencies):
+To install the required dependencies, use the following command:
 
 ```
-pip install numpy torch torchvision opencv-python pillow matplotlib
+pip install numpy torch torchvision opencv-python pillow matplotlib tqdm flask
 ```
-- NumPy: For numerical operations and array manipulation.
-- PyTorch: The core deep learning library for building and training the model.
-- TorchVision: Provides utilities for image processing and loading.
-- OpenCV: For image manipulation tasks such as resizing.
-- Pillow: For opening and processing images.
-- Matplotlib: For visualizing the results.
+
+- **NumPy**: For numerical operations and array manipulation.
+- **PyTorch**: The core deep learning library for building and training the model.
+- **TorchVision**: Utilities for image processing and loading datasets.
+- **OpenCV**: For image manipulation tasks, such as resizing.
+- **Pillow**: For opening and processing images.
+- **Matplotlib**: For visualizing results.
+- **TQDM**: For progress visualization.
+- **Flask**: For website demos.
 
 > Python Version: 3.10
 
 ## How to Run the Model
-1. **Prepare Data**: Ensure that your dataset is ready in the assets folder or what not.
+1. **Prepare Data**: Ensure that your dataset is ready in the `data/` folder.
 
-2. **Train the Model**: Run `main.py` script to download the dataset, run the model, train it, and visualize the precitions from the provided model.
+2. **Train the Model**: Run the `main_cifar10.py` script to download the dataset, train the model, and save the trained model.
 
-3. **Demo the Model**: Run `demo.py` script to demo the model (The demo picks a random image from the CIFAR-10 or the CIFAR-100 dataset and uses those rnadomly selected images to classify which class it is in using a locally saved model.) 
-
-    ***ONLY FOR THE_NEWEST_MDOEL***
+3. **Demo the Model**: Run the `demo.py` script to demo the model. The demo randomly selects images from the CIFAR-10 or CIFAR-100 dataset and classifies them using the locally saved model.
