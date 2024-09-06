@@ -3,8 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-THE_NEWEST_MODEL/data/*
-THE_NEWEST_MODEL/Web_Application/static/uploads/*
+ImageClassifierModel/data/*
+ImageClassifierModel/Web_Application/static/uploads/*
 
 # C extensions
 *.so
