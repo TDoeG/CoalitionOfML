@@ -17,6 +17,14 @@ h1 {
     margin: 20px 0;
 }
 
+#classes{
+    color: #04a909;
+    font-weight: bold;
+}
+p{
+    font-weight: 450;
+}
+
 /* Form Styling */
 form {
     margin: 20px auto;
