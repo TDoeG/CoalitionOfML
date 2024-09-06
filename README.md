@@ -8,7 +8,7 @@ This repository contains deep learning projects that utilize convolutional neura
 ## File Structure
 The project is organized into the following main folder:
 
-### THE_NEWEST_MODEL
+### ImageClassificationModel
 This folder focuses on classifying images from the CIFAR-10 dataset using a convolutional neural network. The model assigns images to one of 10 classes. The folder contains the following key components:
 
 - `data/`: Contains the CIFAR-10 and CIFAR-100 datasets.
@@ -29,17 +29,17 @@ This folder focuses on classifying images from the CIFAR-10 dataset using a conv
 To install the required dependencies, use the following command:
 
 ```
-pip install numpy torch torchvision opencv-python pillow matplotlib tqdm flask
+pip install numpy torch torchvision pillow matplotlib tqdm flask pillow
 ```
 
 - **NumPy**: For numerical operations and array manipulation.
 - **PyTorch**: The core deep learning library for building and training the model.
 - **TorchVision**: Utilities for image processing and loading datasets.
-- **OpenCV**: For image manipulation tasks, such as resizing.
 - **Pillow**: For opening and processing images.
 - **Matplotlib**: For visualizing results.
 - **TQDM**: For progress visualization.
 - **Flask**: For website demos.
+- **Pillow**: for image manipulation.
 
 > Python Version: 3.10
 
