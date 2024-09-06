@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Upload an Image for Classification</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="submit" value="Upload Image">
+    </form>
+    <p>Hello please choose an Image that falls under the categories:</p>
+    <p id=classes>[<a href ="https://www.google.com/search?sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&q=plane&udm=2&fbs=AEQNm0Aa4sjWe7Rqy32pFwRj0UkWd8nbOJfsBGGB5IQQO6L3J6jP6aG80L-e2fp1-X3f05f5uS4yzON_C0W06hD3My-YNTFiFYx03jVlgZmbmBZRiB2Lmo5-hvCwcF7TKPpe4yGDqh-pHKG7jRqgQ20KbRTAAX4bxncrmoiIzel2DqWxvWOAT8qACcE_jCeX3nMwNFMmisMdOnu_S9QLERmUZ-EXi0CrIQ&sa=X&ved=2ahUKEwiV9K_s4a6IAxVwDEQIHZiIKh0QtKgLegQIEBAB&biw=638&bih=598&dpr=1.5">Plane</a>, 
+        <a href ="https://www.google.com/search?q=car&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=WTHbZo7fLbbikPIPxvvG6Q4&ved=0ahUKEwjO757u4a6IAxU2MUQIHca9Me0Q4dUDCBE&uact=5&oq=car&gs_lp=Egxnd3Mtd2l6LXNlcnAiA2NhcjINEAAYgAQYsQMYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTINEAAYgAQYsQMYQxiKBTINEAAYgAQYsQMYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBUjYA1AAWKIBcAB4AJABAJgBQqABrgGqAQEzuAEDyAEA-AEBmAIDoAK6AZgDAJIHATOgB_gN&sclient=gws-wiz-serp">Car</a>, 
+        <a href ="https://www.google.com/search?sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&q=bird&udm=2&fbs=AEQNm0A2upiO_GHeTz6R89sNEjTHXSUfB8x3gweQ77S5CBNH1g6qnkOm8Wwj20n1wcvydGQCPxoov-41s2XFXvsX4IYw8Uzcir8oO80XsTsdYsLP7aNR6OB8VWleDwa23PmHiCRRD_QmcDvkRKi_VOzRbSiKtXdKmaw0tfxjdRcE81BIrVufQmL67yZq7rkr5ed4fAV8KEVvmNwUosJ9ExI_AP9pXrui3A&sa=X&ved=2ahUKEwjAq7eJ4q6IAxUNKEQIHaMOLxkQtKgLegQIEhAB&biw=638&bih=598&dpr=1.5">Bird</a>, 
+        <a href ="https://www.google.com/search?sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&q=cat&udm=2&fbs=AEQNm0DfIOrc-JVK7JSIXTRypzh1d0Xgc-Qx-MWluXtsBh8oLqezDGS-GBRoVhGkujFN9L89G8OpQ_4dZf-PrNf_f2qsBtQmtLqsm6yxAHTedliasJBB9FQSsYwZnyPqqc5ldCsnkGqLbFClqXddPoG99GG8FOnDSp-qlZzIkKjMKkP9CcmcXuDZxiWgaR1I6cT030OuyH9GGaehPhQtpHoYO4976gklqg&sa=X&ved=2ahUKEwiDk_yR466IAxXUL0QIHTfcPPUQtKgLegQIDxAB&biw=638&bih=598&dpr=1.5">Cat</a>, 
+        <a href ="https://www.google.com/search?sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&q=deer&udm=2&fbs=AEQNm0A-5VTqs5rweptgTqb6m-Eb3TvVcv4l7eCyod9RtZW9874wvsYjTfpwMQKGHqKPG-IB7j9flyfH28tJSLVuVdcT1tesPpIhTR_8sOQ3FQrQWiVTfWhoIplDgGh5JzUv9F4u3riMB636EHR41DrkNY_uSRk347tLZsVeJqqyuWPTyXrtg-EYkFQYZqw6rWM1khGHS26HrYFGhj2QeE1uCS-2MrLbBw&sa=X&ved=2ahUKEwj42r7B5K6IAxXKLEQIHWJlI4YQtKgLegQIERAB&biw=638&bih=598&dpr=1.5">Deer</a>, 
+        <a href ="https://www.google.com/search?q=dog&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=IzTbZsaTBZXfkPIP_4m02Ao&ved=0ahUKEwiGsbHC5K6IAxWVL0QIHf8EDasQ4dUDCBE&uact=5&oq=dog&gs_lp=Egxnd3Mtd2l6LXNlcnAiA2RvZzINEAAYgAQYsQMYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTINEAAYgAQYsQMYQxiKBTIIEAAYgAQYsQMyChAAGIAEGEMYigUyBRAAGIAEMggQABiABBixAzINEAAYgAQYsQMYQxiKBTIIEAAYgAQYsQNIsg1QmQpYkwxwAXgAkAEAmAExoAGHAaoBATO4AQPIAQD4AQGYAgSgApoBwgIQEAAYgAQYsQMYQxiDARiKBZgDAIgGAZIHATSgB5QO&sclient=gws-wiz-serp">Dog</a>, 
+        <a href ="https://www.google.com/search?q=frog&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=OjTbZtHGMqWZkPIPnZnQkAI&ved=0ahUKEwjRy9rN5K6IAxWlDEQIHZ0MFCIQ4dUDCBE&uact=5&oq=frog&gs_lp=Egxnd3Mtd2l6LXNlcnAiBGZyb2cyDRAAGIAEGLEDGEMYigUyChAAGIAEGEMYigUyDRAAGIAEGLEDGEMYigUyDRAAGIAEGLEDGEMYigUyDRAAGIAEGLEDGEMYigUyCBAAGIAEGLEDMgUQABiABDIIEAAYgAQYsQMyCBAAGIAEGLEDMggQABiABBixA0jdHlDhCVjfEXACeACQAQCYATWgAZsCqgEBNrgBA8gBAPgBAZgCB6ACtgKoAgCYAwGIBgGSBwE3oAfeHA&sclient=gws-wiz-serp">Frog</a>, 
+        <a href ="https://www.google.com/search?q=horse&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=eTTbZqDmEo3PkPIPxfzYoA0&ved=0ahUKEwjghsDr5K6IAxWNJ0QIHUU-FtQQ4dUDCBE&uact=5&oq=horse&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWhvcnNlMg0QABiABBixAxhDGIoFMgoQABiABBhDGIoFMgoQABiABBhDGIoFMggQABiABBixAzIIEAAYgAQYsQMyDRAAGIAEGLEDGEMYigUyDRAAGIAEGLEDGEMYigUyChAAGIAEGEMYigUyCBAAGIAEGLEDMgUQABiABEjqBVAAWIwFcAB4AJABAJgBM6AB6gGqAQE1uAEDyAEA-AEBmAIFoAL7AZgDAJIHATWgB6EY&sclient=gws-wiz-serp">Horse</a>, 
+        <a href ="https://www.google.com/search?q=ship&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=nDTbZoOQOuXdkPIPzeL0kQs&ved=0ahUKEwiDzr_85K6IAxXlLkQIHU0xPbIQ4dUDCBE&uact=5&oq=ship&gs_lp=Egxnd3Mtd2l6LXNlcnAiBHNoaXAyDRAAGIAEGLEDGEMYigUyChAAGIAEGEMYigUyChAAGIAEGEMYigUyCBAAGIAEGLEDMggQABiABBixAzIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIQEAAYgAQYsQMYQxiDARiKBTIIEAAYgAQYsQNIxAdQAFjDBHAAeACQAQCYATmgAckBqgEBNLgBA8gBAPgBAZgCBKAC2AGYAwCSBwE0oAe9Ew&sclient=gws-wiz-serp">Ship</a>, 
+        <a href ="https://www.google.com/search?q=truck&sca_esv=2fcb7b144273d9a6&rlz=1C1ONGR_enUS957US957&udm=2&biw=638&bih=598&ei=szTbZqSZAsOuur8Pn8W84QU&ved=0ahUKEwjkvoOH5a6IAxVDl-4BHZ8iL1wQ4dUDCBE&uact=5&oq=truck&gs_lp=Egxnd3Mtd2l6LXNlcnAiBXRydWNrMg0QABiABBixAxhDGIoFMg0QABiABBixAxhDGIoFMg0QABiABBixAxhDGIoFMggQABiABBixAzIIEAAYgAQYsQMyChAAGIAEGEMYigUyDRAAGIAEGLEDGEMYigUyCBAAGIAEGLEDMg0QABiABBixAxhDGIoFMggQABiABBixA0jZBVAAWIAEcAB4AJABAJgBQKABlwKqAQE1uAEDyAEA-AEBmAIFoAKqAsICBRAAGIAEmAMAkgcBNaAH9xc&sclient=gws-wiz-serp">Truck</a>]</p>
+</body>
+</html>

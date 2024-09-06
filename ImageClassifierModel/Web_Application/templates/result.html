@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body id="res">
+    <h1>Prediction Result</h1>
+    <p>The uploaded image is classified as: <strong><span style="text-transform:uppercase;">{{ predicted_class }}</span></strong></p>
+
+    <!-- Display the uploaded image -->
+    <div>
+        <h2>Uploaded Image:</h2>
+        <img src="{{ url_for('static', filename=image_url) }}" alt="Uploaded Image" style="width: 550px; height: 400px;">
+    </div>
+
+    <a id="res_link" href="/">Upload another image</a>
+</body>
+</html>
