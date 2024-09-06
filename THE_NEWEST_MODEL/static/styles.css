@@ -17,14 +17,22 @@ h1 {
     margin: 20px 0;
 }
 
-#classes{
-    color: #04a909;
-    font-weight: bold;
-}
 p{
     font-weight: 450;
 }
-
+#classes{
+    font-size: 18px;
+    color: #04a909;
+    font-weight: bold;
+}
+p > a{
+    color: #04a909;
+    text-decoration: none !important;
+}
+a:hover
+{   
+  text-decoration:underline
+}
 /* Form Styling */
 form {
     margin: 20px auto;
@@ -60,12 +68,12 @@ input[type="submit"]:hover {
 
 /* Paragraph Styling */
 p {
-    font-size: 18px;
+    font-size: 17px;
     margin: 20px 0; /* Space around paragraphs */
 }
 
 /* Link Styling */
-a {
+#res_link {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 30px;
@@ -84,4 +92,5 @@ a:hover {
 
 img{
     border-radius: 25px;
+    
 }
