@@ -5,8 +5,28 @@ This repository contains deep learning projects that utilize convolutional neura
 - **Deep Learning Model**: Implements a convolutional neural network for image classification.
 - **PyTorch Implementation**: Efficient and flexible model training and evaluation using PyTorch.
 
-## File Structure
-The project is organized into the following main folder:
+## Project Structure
+
+```
+ImageClassifierModel/
+│
+├── data/                   # Folder containing datasets
+│
+├── Saved_Models/           # Folder containing all Model experimentation
+│
+├── Web_Application/        # Folder containing web application for model
+│   ├── static/             # Folder containing css and uploads folder
+│   ├── templates/          # Folder containing templates in html
+│   └── app.py              # Runs web application via Flask
+│
+├── demo.py                 # File containing demo of preselected model
+│
+├── main_cirfar10.py        # File containing training/saving of model for CIFAR-10 
+│
+├── main_cifar100.py        # File containing training/saving of model for CIFAR-100 (Deprecated for now)
+│
+└── model.py                # File containing model architecture via Pytorch
+```
 
 ### ImageClassificationModel
 This folder focuses on classifying images from the CIFAR-10 dataset using a convolutional neural network. The model assigns images to one of 10 classes. The folder contains the following key components:
