@@ -28,7 +28,7 @@ ImageClassifierModel/
 └── model.py                # File containing model architecture via Pytorch
 ```
 
-### ImageClassificationModel (More in depth info)
+### ImageClassifierModel (More in depth info)
 This folder focuses on classifying images from the CIFAR-10 dataset using a convolutional neural network. The model assigns images to one of 10 classes. The folder contains the following key components:
 
 - `data/`: Contains the CIFAR-10 and CIFAR-100 datasets.
