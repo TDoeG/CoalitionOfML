@@ -23,7 +23,7 @@ ImageClassifierModel/
 │
 ├── main_cirfar10.py        # File containing training/saving of model for CIFAR-10 
 │
-├── main_cifar100.py        # File containing training/saving of model for CIFAR-100 (Deprecated for now)
+├── main_cifar100.py        # File containing training/saving of model for CIFAR-100 (Not working)
 │
 └── model.py                # File containing model architecture via Pytorch
 ```
