@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Ignore Model Data and Website Uploads
 ImageClassifierModel/data/*
 ImageClassifierModel/Web_Application/static/uploads/*
 
